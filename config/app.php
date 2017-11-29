@@ -7,12 +7,12 @@ return [
     /*
      * Here goes the application name.
      */
-    'name' => 'Laravel Zero',
+    'name' => 'JIRA Smart Commiter',
 
     /*
      * Here goes the application version.
      */
-    'version' => '1.0.0',
+    'version' => '0.1.0',
 
     /*
      * Here goes the application default command. By default
