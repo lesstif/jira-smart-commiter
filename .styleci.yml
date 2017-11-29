@@ -1,0 +1,3 @@
+preset: recommended 
+disabled:
+    #  - self_accessor
