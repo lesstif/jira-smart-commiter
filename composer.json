@@ -1,0 +1,27 @@
+{
+    "name": "lesstif/jira-smart-commiter",
+    "description": "JIRA Smart commiter with DVCS Repository.",
+    "type": "library",
+    "keywords": ["jira", "rest", "jira-php", "jira-smart-commit", "jira-dvcs", "jira-dvcs-connector"],
+    "require": {
+        "php": ">=7.1",
+        "laravel-zero/laravel-zero": "4.0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.4",
+        "symfony/var-dumper": "~2.8|~3.0"
+    },
+    "license": "Apache 2.0",
+    "authors": [
+        {
+            "name": "KwangSeob Jeong",
+            "email": "lesstif@gmail.com",
+            "homepage": "https://lesstif.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+             "Lesstif\\SmartCommit\\": "src/"
+        }
+    }
+}
