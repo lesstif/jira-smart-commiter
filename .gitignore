@@ -124,4 +124,9 @@ Session.vim
 # auto-generated tag files
 tags
 
+.twgit_features_subject
+
+/builds/
+/database/ 
 # End of https://www.gitignore.io/api/vim,linux,laravel,phpstorm,composer
+.idea/
