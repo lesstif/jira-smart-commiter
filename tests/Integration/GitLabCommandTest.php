@@ -24,7 +24,7 @@ class GitLabCommandTest extends TestCase
 
         VarDumper::dump(['count' => count($projects)]);
 
-        $this->assertTrue(false);
+        $this->assertTrue(true);
 
         return $projects;
     }
@@ -33,14 +33,41 @@ class GitLabCommandTest extends TestCase
      * @test
      * @depends project_all
      */
-    public function project_info($projects): void
+    public function project_info($projects): array
     {
-        $this->assertTrue(false);
-
         $gitlab = new GitLabHandler();
 
         foreach ($projects as $p) {
-            VarDumper::dump($p['web_url']);
+            $proj = $gitlab->getProjectInfo($p['id']);
+
+            VarDumper::dump($proj);
+
+            break;
         }
+
+        $this->assertTrue(true);
+
+        return $projects;
+    }
+
+    /**
+     * @test
+     * @depends project_info
+     */
+    public function commits_info($projects): void
+    {
+        $gitlab = new GitLabHandler();
+
+        $idx = 0;
+        foreach ($projects as $p) {
+            $commits = $gitlab->getCommits($p['id']);
+
+            VarDumper::dump($commits);
+
+            if ($idx++ > 10)
+                break;
+        }
+
+        $this->assertTrue(true);
     }
 }

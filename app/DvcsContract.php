@@ -68,7 +68,9 @@ abstract class DvcsContract
      *
      * @return mixed
      */
-    abstract function getProjects() : array ;
+    abstract public function getProjects() : array ;
 
-    abstract function getCommits($since) : array ;
+    abstract public function getProjectInfo($projectId) : array ;
+
+    abstract public function getCommits($projectId, $since, $until, $options) : array ;
 }

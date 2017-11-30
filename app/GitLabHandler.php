@@ -30,8 +30,24 @@ class GitLabHandler extends DvcsContract
         return $pager->fetchall($this->client->projects(), 'all', [$parameters]);
     }
 
-    public function getCommits($since): array
+    public function getCommits($projectId, $since = null, $until = null, $options = []): array
     {
-        // TODO: Implement getCommits() method.
+        $proj = $this->client->repositories()->branches($projectId, $options);
+
+        return $proj;
     }
+
+    /**
+     * get Project Info
+     *
+     * @param $projectId
+     * @return array
+     */
+    public function getProjectInfo($projectId) : array
+    {
+        $proj = $this->client->projects()->show($projectId);
+
+        return $proj;
+    }
+
 }
