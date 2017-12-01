@@ -49,5 +49,4 @@ class GitLabHandler extends DvcsContract
 
         return $proj;
     }
-
 }

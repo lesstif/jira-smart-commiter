@@ -28,8 +28,9 @@ abstract class DvcsContract
 
     public function envLoad($path = null)
     {
-        if (empty($path))
+        if (empty($path)) {
             $path = base_path();
+        }
 
         $dotenv = new \Dotenv\Dotenv($path);
         $dotenv->load();

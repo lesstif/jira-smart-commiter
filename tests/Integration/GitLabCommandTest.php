@@ -19,7 +19,7 @@ class GitLabCommandTest extends TestCase
         $projects = $gitlab->getProjects($parameters);
 
         foreach ($projects as $p) {
-       //     VarDumper::dump($p['web_url']);
+            //     VarDumper::dump($p['web_url']);
         }
 
         VarDumper::dump(['count' => count($projects)]);
@@ -64,8 +64,9 @@ class GitLabCommandTest extends TestCase
 
             VarDumper::dump($commits);
 
-            if ($idx++ > 10)
+            if ($idx++ > 10) {
                 break;
+            }
         }
 
         $this->assertTrue(true);

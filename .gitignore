@@ -130,3 +130,5 @@ tags
 /database/ 
 # End of https://www.gitignore.io/api/vim,linux,laravel,phpstorm,composer
 .idea/
+.php_cs.cache
+storage/

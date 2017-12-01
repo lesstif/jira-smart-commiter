@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use Illuminate\Support\Facades\Storage;
 
 class InitCommand extends Command
 {
@@ -38,18 +39,20 @@ class InitCommand extends Command
      */
     public function handle(): void
     {
+        Storage::put("reminders.txt", "Task 1");
+
         $this->info('init commend not yet impl!');
     }
 
     /**
-	 * Define the command's schedule.
-	 *
-	 * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-	 *
-	 * @return void
-	 */
-	public function schedule(Schedule $schedule): void
-	{
-		// $schedule->command(static::class)->everyMinute();
-	}
+     * Define the command's schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     *
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
 }
