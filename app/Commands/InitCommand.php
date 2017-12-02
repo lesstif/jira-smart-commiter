@@ -2,12 +2,15 @@
 
 namespace App\Commands;
 
+use App\SmartCommitConfig;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use Illuminate\Support\Facades\Storage;
 
 class InitCommand extends Command
 {
+    private $config ;
+
     /**
      * The name and signature of the console command.
      *
@@ -30,6 +33,8 @@ class InitCommand extends Command
     public function __construct()
     {
         parent::__construct();
+
+        $this->config = new SmartCommitConfig();
     }
 
     /**
@@ -39,9 +44,11 @@ class InitCommand extends Command
      */
     public function handle(): void
     {
-        Storage::put("reminders.txt", "Task 1");
+        //Storage::put("reminders.txt", "Task 1");
+        $this->config->save();
 
-        $this->info('init commend not yet impl!');
+        $this->info('initial config generation done.!');
+        $this->info("Edit the '~/.smartcommit/settings.json' to suit your environment. ");
     }
 
     /**

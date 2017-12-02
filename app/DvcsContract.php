@@ -3,38 +3,22 @@ namespace App;
 
 abstract class DvcsContract
 {
-    /**
-     * @var \Dotenv\Dotenv
-     */
-    protected $dotenv;
+    protected $config;
 
-    /** @var string  */
-    protected $gitHost;
+    protected $debug;
+    protected $verbose;
 
-    /** @var string  */
-    protected $gitToken;
-
-    /** @var string  */
-    protected $jiraHost;
-
-    /** @var string  */
-    protected $jiraUser;
-
-    /** @var string  */
-    protected $jiraPasswd;
-
-    protected $debug = false;
-    protected $verbose = false;
-
-    public function envLoad($path = null)
+    public function __construct(SmartCommitConfig $config)
     {
-        if (empty($path)) {
-            $path = base_path();
-        }
+        $this->$config = $config;
+    }
 
-        $dotenv = new \Dotenv\Dotenv($path);
-        $dotenv->load();
+    public function envLoad()
+    {
+        //$this->config = new SmartCommitConfig();
+        //$this->config->load($file);
 
+        /*
         // gitlab login info
         $this->gitHost  = str_replace("\"", "", getenv('GITLAB_HOST'));
         $this->gitToken = str_replace("\"", "", getenv('GITLAB_TOKEN'));
@@ -42,26 +26,29 @@ abstract class DvcsContract
         $this->jiraHost = str_replace("\"", "", getenv('JIRA_HOST'));
         $this->jiraUser = str_replace("\"", "", getenv('JIRA_USER'));
         $this->jiraPasswd = str_replace("\"", "", getenv('JIRA_PASS'));
-
-        $debug = str_replace("\"", "", getenv('APP_DEBUG'));
-        if (strtolower($debug) === 'true') {
+*/
+        $this->debug = str_replace("\"", "", getenv('APP_DEBUG'));
+        if (strtolower($this->debug) === 'true') {
             $this->debug = true;
         }
-        $verbose = str_replace("\"", "", getenv('APP_VERBOSE'));
+        $this->verbose = str_replace("\"", "", getenv('APP_VERBOSE'));
 
-        if (strtolower($verbose) === 'true') {
+        if (strtolower($this->verbose) === 'true') {
             $this->verbose = true;
         }
     }
 
-    public function isDebug()
+    public function __get($name)
     {
-        return $this->debug;
-    }
+        echo "Getting '$name'\n";
 
-    public function isVerbose()
-    {
-        return $this->verbose;
+        $data = get_object_vars($this->config);
+
+        if (array_key_exists($name, $data)) {
+            return $this->data[$name];
+        }
+
+        return null;
     }
 
     /**

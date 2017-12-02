@@ -12,7 +12,7 @@ class GitLabHandler extends DvcsContract
     {
         $this->envLoad();
 
-        $this->client = \Gitlab\Client::create($this->gitHost)
+        $this->client = \Gitlab\Client::create($this->getGitHost())
             ->authenticate($this->gitToken, Client::AUTH_URL_TOKEN)
         ;
     }

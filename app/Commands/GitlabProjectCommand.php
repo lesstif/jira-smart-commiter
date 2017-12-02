@@ -2,17 +2,19 @@
 
 namespace App\Commands;
 
+use App\DvcsConnectorFactory;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use App\SmartCommitBaseCommand;
 
-class GitlabProjectCommand extends Command
+class GitlabProjectCommand extends SmartCommitBaseCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'project:list-create';
+    protected $signature = 'project:create-list';
 
     /**
      * The console command description.
@@ -38,6 +40,10 @@ class GitlabProjectCommand extends Command
      */
     public function handle(): void
     {
+        parent::handle();
+
+        //$dvcs = DvcsConnectorFactory::create('gitla');
+
         $this->info('project list create function not yet impl!');
     }
 

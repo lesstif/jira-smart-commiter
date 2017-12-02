@@ -4,7 +4,16 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class Transition implements \JsonSerializable {
+class SettingConfig implements \JsonSerializable {
+    public $jiraHost = "https://you-jira.host.com";
+    public $jiraUser = "jira-username";
+    public $jiraPass = "jira-password";
+
+    public $dvcsType = "gitlab";
+
+    public $gitlabHost = "https://your-gitlab.host.com";
+    public $gitlabToken = "gitlab-token-here";
+
     public $transitions_comment = '{USER} Issue {TRANSITION} with {COMMIT}';
     public $transitions = [
         [
@@ -54,22 +63,47 @@ class Transition implements \JsonSerializable {
  */
 class SmartCommitConfig
 {
-    private $transition;
-
-    private $file = 'settings.json';
+    private $config;
 
     public function __construct()
     {
-        $this->transition = new Transition();
+        $this->config = new SettingConfig();
+    }
+
+    /**
+     *
+     * @param $name
+     * @return null
+     */
+    public function __get($name)
+    {
+        echo "Getting '$name'\n";
+
+        $data = get_object_vars($this->config);
+
+        if (array_key_exists($name, $data)) {
+            return $this->data[$name];
+        }
+
+        return null;
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     public function load($file = 'settings.json')
     {
-        $string = file_get_contents(base_path() . DIRECTORY_SEPARATOR  . $file);
+        if (!Storage::exists($file)) {
+            throw new \SmartCommitException("Config file " . $file . " Not found. running 'php jira-smart-config init' ");
+        }
 
-        $this->transition = json_decode($string);
+        $json = Storage::get($file);
 
-        dd($this->transition);
+        //$string = file_get_contents(base_path() . DIRECTORY_SEPARATOR  . $file);
+
+        $this->config = json_decode($json);
     }
 
     /**
@@ -78,17 +112,16 @@ class SmartCommitConfig
      * @param bool $overwrite overwrite previous settings.json
      *
      */
-    public function save($overwrite = false)
+    public function save($file = 'settings.json', $overwrite = false)
     {
-        $json = json_encode($this->transition, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        $json = json_encode($this->config, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
-        //dump($json);
-        if (Storage::exists($this->file) && $overwrite !== true) {
+        if (Storage::exists($file) && $overwrite !== true) {
             $now = Carbon::now();
             $now->setToStringFormat('Y-m-d-H-i-s');
-            Storage::move($this->file, $this->file . '-' . $now);
+            Storage::move($file, $file . '-' . $now);
         }
 
-        Storage::put($this->file, $json);
+        Storage::put($file, $json);
     }
 }
