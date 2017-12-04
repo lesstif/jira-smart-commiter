@@ -115,7 +115,7 @@ class SmartCommitConfig
      */
     public function save($file = 'settings.json', $overwrite = false)
     {
-        $json = json_encode($this->config, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        $json = json_encode($this->settings, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
         if (Storage::exists($file) && $overwrite !== true) {
             $now = Carbon::now();
