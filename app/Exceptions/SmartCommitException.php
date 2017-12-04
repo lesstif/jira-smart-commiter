@@ -1,4 +1,4 @@
 <?php
 namespace App\Exceptions;
 
-class SmartCommitException extends Exception {}
+class SmartCommitException extends \Exception {}

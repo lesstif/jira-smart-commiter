@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Exceptions\SmartCommitException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -63,6 +64,9 @@ class Settings implements \JsonSerializable {
  */
 class SmartCommitConfig
 {
+    /**
+     * @var Settings
+     */
     private $settings;
     private $data;
 
@@ -97,7 +101,7 @@ class SmartCommitConfig
     public function load($file = 'settings.json')
     {
         if (!Storage::exists($file)) {
-            throw new \SmartCommitException("Config file " . $file . " Not found. running 'php jira-smart-config init' ");
+            throw new SmartCommitException("Config file " . $file . " Not found. running 'php jira-smart-config init' ");
         }
 
         $json = Storage::get($file);

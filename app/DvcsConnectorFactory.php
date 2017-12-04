@@ -3,6 +3,7 @@ namespace App;
 
 use App\Exceptions\NotImplmentationException;
 use InvalidArgumentException;
+use App\Exceptions\SmartCommitException;
 
 class DvcsConnectorFactory
 {
@@ -12,11 +13,11 @@ class DvcsConnectorFactory
 
         $config->load();
 
-        if (empty($config->getSettings()->dvcsType)) {
-            throw SmartCommitException("DVCS Type not found");
-        }
-
         $dvcsType = $config->getSettings()->dvcsType;
+
+        if (empty($dvcsType)) {
+            throw new SmartCommitException("DVCS Type not found");
+        }
 
         switch($dvcsType) {
             case 'gitlab':
