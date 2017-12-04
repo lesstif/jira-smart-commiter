@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Models\Settings;
 use App\SmartCommitConfig;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -34,7 +35,7 @@ class InitCommand extends Command
     {
         parent::__construct();
 
-        $this->config = new SmartCommitConfig();
+        $this->config = new SmartCommitConfig(new Settings());
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\SmartCommitBaseCommand;
 
-class GitlabProjectCommand extends SmartCommitBaseCommand
+class GitlabProjectCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -40,11 +40,9 @@ class GitlabProjectCommand extends SmartCommitBaseCommand
      */
     public function handle(): void
     {
-        //parent::handle();
-
         $dvcsHandler = DvcsConnectorFactory::create();
 
-        $projects = $dvcsHandler->getProjects();
+        $projects = $dvcsHandler->getProjects(['owned'=>true]);
 
         foreach($projects as $p) {
             dump($p);

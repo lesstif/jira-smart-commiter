@@ -21,8 +21,6 @@ class GitLabHandler extends DvcsContract
         $gitlabHost = $this->getProperty('gitlabHost');
         $gitlabToken = $this->getProperty('gitlabToken');
 
-        //Log::debug("gitHost:" . $gitlabHost);
-
         $this->client = \Gitlab\Client::create($gitlabHost)
             ->authenticate($gitlabToken, Client::AUTH_URL_TOKEN)
         ;
@@ -36,9 +34,15 @@ class GitLabHandler extends DvcsContract
     public function getProjects($parameters = []): array
     {
         // fetch all project
-        $pager = new ResultPager($this->client);
+        $jsonProjects = $this->client->projects()->all($parameters);
 
-        return $pager->fetchall($this->client->projects(), 'all', [$parameters]);
+        $mapper = new JsonMapper();
+
+        $projsArray = $mapper->mapArray(
+            $jsonProjects, array(), 'Project'
+        );
+
+        return $projsArray;
     }
 
     public function getCommits($projectId, $since = null, $until = null, $options = []): array
@@ -59,5 +63,18 @@ class GitLabHandler extends DvcsContract
         $proj = $this->client->projects()->show($projectId);
 
         return $proj;
+    }
+
+    /**
+     * List all Projects
+     *
+     * @return mixed
+     */
+    public function getAllProjects($options = []): array
+    {
+        // fetch all project
+        $pager = new ResultPager($this->client);
+
+        return $pager->fetchall($this->client->projects(), 'all', [$options]);
     }
 }

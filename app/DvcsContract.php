@@ -17,12 +17,13 @@ abstract class DvcsContract
         $this->config = $config;
     }
 
-    protected function getProperty($name)
+    public function getProperty($name)
     {
         //Log::debug("Getting '$name'");
 
         if(empty($this->data)) {
-            $this->data = $this->config->getSettings()->jsonSerialize();
+            $c = $this->config;
+            $this->data = $c->jsonData();
         }
 
         if (array_key_exists($name, $this->data)) {
@@ -32,14 +33,16 @@ abstract class DvcsContract
         return null;
     }
 
+    abstract public function getProjects($options = []) : array ;
+
     /**
      * List all Projects
      *
      * @return mixed
      */
-    abstract public function getProjects() : array ;
+    abstract public function getAllProjects($options = []) : array ;
 
     abstract public function getProjectInfo($projectId) : array ;
 
-    abstract public function getCommits($projectId, $since, $until, $options) : array ;
+    abstract public function getCommits($projectId, $since, $until, $options = []) : array ;
 }
