@@ -42,9 +42,15 @@ class GitlabProjectCommand extends SmartCommitBaseCommand
     {
         parent::handle();
 
-        //$dvcs = DvcsConnectorFactory::create('gitla');
+        $dvcsHandler = DvcsConnectorFactory::create();
 
-        $this->info('project list create function not yet impl!');
+        $projects = $dvcsHandler->getProjects();
+
+        foreach($projects as $p) {
+            dump($p);
+        }
+
+        //$this->info('project list create function not yet impl!');
     }
 
     /**

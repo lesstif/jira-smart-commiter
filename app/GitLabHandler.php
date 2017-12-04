@@ -4,16 +4,27 @@ namespace App;
 use \GitLab\Client;
 use \Gitlab\ResultPager;
 
+use Illuminate\Support\Facades\Log;
+
 class GitLabHandler extends DvcsContract
 {
     private $client;
 
-    public function __construct()
+    /**
+     * GitLabHandler constructor.
+     * @param SmartCommitConfig $config
+     */
+    public function __construct(SmartCommitConfig $config)
     {
-        $this->envLoad();
+        parent::__construct($config);
 
-        $this->client = \Gitlab\Client::create($this->gitHost)
-            ->authenticate($this->gitToken, Client::AUTH_URL_TOKEN)
+        $gitlabHost = $this->getProperty('gitlabHost');
+        $gitlabToken = $this->getProperty('gitlabToken');
+
+        //Log::debug("gitHost:" . $gitlabHost);
+
+        $this->client = \Gitlab\Client::create($gitlabHost)
+            ->authenticate($gitlabToken, Client::AUTH_URL_TOKEN)
         ;
     }
 

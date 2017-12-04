@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //$a = new \Monolog\Logger\Logger;
         //
+        $this->app->bind(
+            "Illuminate\Support\Facades\Log",
+            "Monolog\Repository"
+        );
     }
 
     /**

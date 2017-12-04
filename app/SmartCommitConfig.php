@@ -4,7 +4,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class SettingConfig implements \JsonSerializable {
+class Settings implements \JsonSerializable {
     public $jiraHost = "https://you-jira.host.com";
     public $jiraUser = "jira-username";
     public $jiraPass = "jira-password";
@@ -63,11 +63,12 @@ class SettingConfig implements \JsonSerializable {
  */
 class SmartCommitConfig
 {
-    private $config;
+    private $settings;
+    private $data;
 
     public function __construct()
     {
-        $this->config = new SettingConfig();
+        $this->settings = new Settings();
     }
 
     /**
@@ -79,18 +80,18 @@ class SmartCommitConfig
     {
         echo "Getting '$name'\n";
 
-        $data = get_object_vars($this->config);
+        $this->data = $this->settings->jsonSerialize();
 
-        if (array_key_exists($name, $data)) {
+        if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
 
         return null;
     }
 
-    public function getConfig()
+    public function getSettings()
     {
-        return $this->config;
+        return $this->settings;
     }
 
     public function load($file = 'settings.json')

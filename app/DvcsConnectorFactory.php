@@ -6,9 +6,17 @@ use InvalidArgumentException;
 
 class DvcsConnectorFactory
 {
-    public static function create(SmartCommitConfig $config) : DvcsContract
+    public static function create() : DvcsContract
     {
-        $dvcsType = $config->getConfig()->dvcsType;
+        $config = new SmartCommitConfig();
+
+        $config->load();
+
+        if (empty($config->getSettings()->dvcsType)) {
+            throw SmartCommitException("DVCS Type not found");
+        }
+
+        $dvcsType = $config->getSettings()->dvcsType;
 
         switch($dvcsType) {
             case 'gitlab':

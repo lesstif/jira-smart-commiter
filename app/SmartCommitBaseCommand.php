@@ -24,7 +24,7 @@ class SmartCommitBaseCommand extends Command
     public function handle(): void
     {
         // TODO: Implement handle() method.
-
+        /*
         $this->config = new SmartCommitConfig();
 
         $this->config->load();
@@ -32,8 +32,9 @@ class SmartCommitBaseCommand extends Command
         if (empty($this->config->getConfig()->dvcsType)) {
             throw SmartCommitException("DVCS Type not found");
         }
+        */
 
-        $handler = DvcsConnectorFactory::create($this->config);
+        $handler = DvcsConnectorFactory::create();
 
 
     }
