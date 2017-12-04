@@ -40,7 +40,7 @@ class GitlabProjectCommand extends SmartCommitBaseCommand
      */
     public function handle(): void
     {
-        parent::handle();
+        //parent::handle();
 
         $dvcsHandler = DvcsConnectorFactory::create();
 

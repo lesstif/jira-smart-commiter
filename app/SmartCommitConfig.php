@@ -89,7 +89,7 @@ class SmartCommitConfig
         return null;
     }
 
-    public function getSettings()
+    public function getSettings() : Settings
     {
         return $this->settings;
     }
@@ -104,7 +104,7 @@ class SmartCommitConfig
 
         //$string = file_get_contents(base_path() . DIRECTORY_SEPARATOR  . $file);
 
-        $this->config = json_decode($json);
+        $this->settings = json_decode($json);
     }
 
     /**
