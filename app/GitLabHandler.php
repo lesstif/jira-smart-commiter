@@ -1,10 +1,14 @@
 <?php
 namespace App;
 
+use App\Models\GitlabDto;
+use App\Models\ProjectDto;
 use \GitLab\Client;
+use Gitlab\Model\Project;
 use \Gitlab\ResultPager;
 
 use Illuminate\Support\Facades\Log;
+use JsonMapper;
 
 class GitLabHandler extends DvcsContract
 {
@@ -22,8 +26,7 @@ class GitLabHandler extends DvcsContract
         $gitlabToken = $this->getProperty('gitlabToken');
 
         $this->client = \Gitlab\Client::create($gitlabHost)
-            ->authenticate($gitlabToken, Client::AUTH_URL_TOKEN)
-        ;
+            ->authenticate($gitlabToken, Client::AUTH_URL_TOKEN);
     }
 
     /**
@@ -38,9 +41,13 @@ class GitLabHandler extends DvcsContract
 
         $mapper = new JsonMapper();
 
-        $projsArray = $mapper->mapArray(
-            $jsonProjects, array(), 'Project'
-        );
+        $projsArray = [];
+
+        foreach ($jsonProjects as $jp) {
+            $gitlab = $mapper->map(json_decode(json_encode($jp)), new GitlabDto());
+            $pd = new ProjectDto(null, $gitlab);
+            $projsArray[] = $pd;
+        }
 
         return $projsArray;
     }

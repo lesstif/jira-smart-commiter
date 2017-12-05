@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Models\GitlabDto;
 use \GitLab\Client;
 use \Gitlab\ResultPager;
 
@@ -21,9 +22,7 @@ class GitLabV3Handler extends DvcsContract
         $gitlabHost = $this->getProperty('gitlabHost');
         $gitlabToken = $this->getProperty('gitlabToken');
 
-        dump(['$gitlabToken' => $gitlabToken]);
-        $this->client = new \Gitlab\Client($gitlabHost . '/api/v3/');
-        $this->client->authenticate($gitlabToken, \Gitlab\Client::AUTH_URL_TOKEN);
+        $this->client = new HttpClient($gitlabHost, $gitlabToken);
     }
 
     /**
@@ -40,22 +39,15 @@ class GitLabV3Handler extends DvcsContract
             'sort' => 'asc',
         ];
 
-        //$parameters = array_replace($default, $parameters);
-        $gitlabHost = $this->getProperty('gitlabHost');
-        $gitlabToken = $this->getProperty('gitlabToken');
+        $json = $this->client->request('projects/');
 
-        $this->client = new \Gitlab\Client($gitlabHost . '/api/v3/');
-        $this->client->authenticate($gitlabToken, \Gitlab\Client::AUTH_URL_TOKEN);
+        dd($json);
 
-        $jsonProjects = $this->client->api('projects')->all();
-
-        $mapper = new JsonMapper();
-
-        $projsArray = $mapper->mapArray(
-            $jsonProjects, array(), 'Project'
+        $projs = $this->mapper->map(
+            $json, new GitlabDto()
         );
 
-        return $projsArray;
+        return $projs;
     }
 
     public function getCommits($projectId, $since = null, $until = null, $options = []): array

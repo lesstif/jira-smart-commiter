@@ -12,9 +12,12 @@ abstract class DvcsContract
 
     protected $data;
 
+    protected $mapper;
+
     public function __construct(SmartCommitConfig $config)
     {
         $this->config = $config;
+        $this->mapper = new \JsonMapper();
     }
 
     public function getProperty($name)
