@@ -28,7 +28,35 @@ External JIRA smart commiter.
 
 # Installation
 
-TODO
+## Build from Source
+Recommended method for gitlab < 9.0
+
+1. clone repository
+  ```sh
+  git clone https://github.com/lesstif/jira-smart-commiter.git && cd jira-smart-commiter
+  ```
+
+1. change gitlab api library version in the composer.json
+   
+   if gitlab >= 9.0(API V4), then use "^9.6"
+  ```sh
+  "require": {
+        "m4tthumphrey/php-gitlab-api": "^9.6",
+  ```
+  
+   if gitlab < 9.0(API V3), then use "~8.0"
+  ```sh
+  "require": {
+        "m4tthumphrey/php-gitlab-api": "~8.0",
+  ```
+
+1. install composer dependency
+  ```sh
+  composer install
+  ```
+
+## download
+
 
 # Usage
 

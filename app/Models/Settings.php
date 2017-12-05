@@ -6,14 +6,19 @@ namespace App\Models;
  * @package App
  */
 class Settings implements \JsonSerializable {
-    public $jiraHost = "https://you-jira.host.com";
-    public $jiraUser = "jira-username";
-    public $jiraPass = "jira-password";
+    public $jiraHost = 'https://you-jira.host.com';
+    public $jiraUser = 'jira-username';
+    public $jiraPass = 'jira-password';
 
-    public $dvcsType = "gitlab";
+    public $dvcsType = 'gitlab';
 
-    public $gitlabHost = "https://your-gitlab.host.com";
-    public $gitlabToken = "gitlab-token-here";
+    /**
+     * @var string gitlab API Version, V3|V4
+     */
+    public $gitlabApiVersion = 'V4';
+
+    public $gitlabHost = 'https://your-gitlab.host.com';
+    public $gitlabToken = 'gitlab-token-here';
 
     public $transitions_comment = '{USER} Issue {TRANSITION} with {COMMIT}';
     public $transitions = [

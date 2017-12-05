@@ -21,6 +21,10 @@ class DvcsConnectorFactory
 
         switch($dvcsType) {
             case 'gitlab':
+                $ver = mb_strtoupper ($config->getSettings()->gitlabApiVersion);
+                if ($ver === 'V3') {
+                    return new GitLabV3Handler($config);
+                }
                 return new GitLabHandler($config);
             case 'github':
                 throw new NotImplmentationException("github handler not implmentation yet.");

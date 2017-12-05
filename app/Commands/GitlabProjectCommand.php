@@ -42,7 +42,7 @@ class GitlabProjectCommand extends Command
     {
         $dvcsHandler = DvcsConnectorFactory::create();
 
-        $projects = $dvcsHandler->getProjects(['owned'=>true]);
+        $projects = $dvcsHandler->getProjects();
 
         foreach($projects as $p) {
             dump($p);

@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\DvcsConnectorFactory;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -12,7 +13,7 @@ class GitlabProjectInfoCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'project:info {IdOrName}';
+    protected $signature = 'project:info {id}';
 
     /**
      * The console command description.
@@ -38,6 +39,14 @@ class GitlabProjectInfoCommand extends Command
      */
     public function handle(): void
     {
+        $id = $this->argument('id');
+
+        $dvcsHandler = DvcsConnectorFactory::create();
+
+        $proj = $dvcsHandler->getProjectInfo($id);
+
+        dump($proj);
+
         $this->info('project info function not yet impl!');
     }
 
