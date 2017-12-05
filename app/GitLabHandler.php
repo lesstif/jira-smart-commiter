@@ -89,4 +89,15 @@ class GitLabHandler extends DvcsContract
 
         return $projsArray;
     }
+
+    /**
+     * save DVCS Project Info
+     *
+     * @param $projects
+     * @return mixed
+     */
+    public function saveProjects($projects) : void
+    {
+        // TODO: Implement saveProjects() method.
+    }
 }

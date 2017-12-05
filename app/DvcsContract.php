@@ -48,4 +48,12 @@ abstract class DvcsContract
     abstract public function getProjectInfo($projectId) : array ;
 
     abstract public function getCommits($projectId, $since, $until, $options = []) : array ;
+
+    /**
+     * save DVCS Project Info
+     *
+     * @param $projects
+     * @return mixed
+     */
+    abstract public function saveProjects($projects) : void;
 }

@@ -6,6 +6,7 @@ use \GitLab\Client;
 use \Gitlab\ResultPager;
 
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\NotImplmentationException;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -81,5 +82,17 @@ class GitLabV3Handler extends DvcsContract
         $pager = new ResultPager($this->client);
 
         return $pager->fetchall($this->client->projects(), 'all', [$options]);
+    }
+
+    /**
+     * save DVCS Project Info
+     *
+     * @param $projects
+     * @return mixed
+     */
+    public function saveProjects($projects) : void
+    {
+        // TODO: Implement saveProjects() method.
+        return NotImplmentationException("saveProjects() not implmented");
     }
 }

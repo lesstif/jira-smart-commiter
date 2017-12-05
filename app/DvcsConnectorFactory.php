@@ -11,7 +11,7 @@ class DvcsConnectorFactory
     {
         $config = new SmartCommitConfig();
 
-        $config->load();
+        $config->loadSettings();
 
         $dvcsType = $config->getSettings()->dvcsType;
 

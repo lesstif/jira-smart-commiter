@@ -46,7 +46,7 @@ class InitCommand extends Command
     public function handle(): void
     {
         //Storage::put("reminders.txt", "Task 1");
-        $this->config->save();
+        $this->config->saveSettings();
 
         $this->info('initial config generation done.!');
         $this->info("Edit the '~/.smartcommit/settings.json' to suit your environment. ");
