@@ -39,17 +39,7 @@ class GitLabHandler extends DvcsContract
         // fetch all project
         $jsonProjects = $this->client->projects()->all($parameters);
 
-        $mapper = new JsonMapper();
-
-        $projsArray = [];
-
-        foreach ($jsonProjects as $jp) {
-            $gitlab = $mapper->map(json_decode(json_encode($jp)), new GitlabDto());
-            $pd = new ProjectDto(null, $gitlab);
-            $projsArray[] = $pd;
-        }
-
-        return $projsArray;
+        return $this->parseProjectArray($jsonProjects);
     }
 
     public function getCommits($projectId, $since = null, $until = null, $options = []): array
@@ -82,6 +72,21 @@ class GitLabHandler extends DvcsContract
         // fetch all project
         $pager = new ResultPager($this->client);
 
-        return $pager->fetchall($this->client->projects(), 'all', [$options]);
+        $jsonProjects = $pager->fetchall($this->client->projects(), 'all', [$options]);
+
+        return $this->parseProjectArray($jsonProjects);
+    }
+
+    private function parseProjectArray($jsonProjects) : array
+    {
+        $projsArray = [];
+
+        foreach ($jsonProjects as $jp) {
+            $gitlab = $this->mapper->map(json_decode(json_encode($jp)), new GitlabDto());
+            $pd = new ProjectDto(null, $gitlab);
+            $projsArray[] = $pd;
+        }
+
+        return $projsArray;
     }
 }

@@ -21,7 +21,7 @@ class GitlabProjectCommand extends Command
      *
      * @var string
      */
-    protected $description = 'generate all gitlab project owned by you.';
+    protected $description = 'generate all gitlab project that the current user is a member of and archived is false';
 
     /**
      * Create a new command instance.
@@ -42,11 +42,13 @@ class GitlabProjectCommand extends Command
     {
         $dvcsHandler = DvcsConnectorFactory::create();
 
-        $projects = $dvcsHandler->getProjects();
+        $projects = $dvcsHandler->getAllProjects(['membership' => true, 'archived' => false]);
 
         foreach($projects as $p) {
             dump($p);
         }
+
+        dump(['count' => count($projects)]);
 
         //$this->info('project list create function not yet impl!');
     }
