@@ -13,6 +13,8 @@ class GitLabV3Handler extends DvcsContract
 {
     private $client;
 
+    private $options;
+
     /**
      * GitLabHandler constructor.
      * @param SmartCommitConfig $config
@@ -25,6 +27,13 @@ class GitLabV3Handler extends DvcsContract
         $gitlabToken = $this->getProperty('gitlabToken');
 
         $this->client = new HttpClient($gitlabHost, $gitlabToken);
+
+        $this->options = [
+            'page' => 1,
+            'per_page' => 100,
+            'order_by' =>  'created_at',
+            'sort' => 'asc',
+        ];
     }
 
     /**
@@ -34,14 +43,9 @@ class GitLabV3Handler extends DvcsContract
      */
     public function getProjects($parameters = []): array
     {
-        $default = [
-            'page' => 1,
-            'per_page' => 20,
-            'order_by' =>  'created_at',
-            'sort' => 'asc',
-        ];
+        $parameters = array_replace($this->options, $parameters);
 
-        $json = $this->client->request('projects/');
+        $json = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
             $json, array(), GitlabDto::class
@@ -75,20 +79,15 @@ class GitLabV3Handler extends DvcsContract
      *
      * @return mixed
      */
-    public function getAllProjects($options = []): array
+    public function getAllProjects($parameters = []): array
     {
-        $default = [
-            'page' => 1,
-            'per_page' => 100,
-            'order_by' =>  'created_at',
-            'sort' => 'asc',
-        ];
+        $parameters = array_replace($this->options, $parameters);
 
-        $json = $this->client->request('projects/');
+        $json = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
-            //$json, array(), GitlabDto::class
-            $json, array(), null
+            $json, array(), GitlabDto::class
+            //$json, array(), null
         );
 
         return $projs;
@@ -104,20 +103,19 @@ class GitLabV3Handler extends DvcsContract
     {
         Log::info('saveProjects : ');
 
-        // TODO: Implement saveProjects() method.
-        //return NotImplmentationException("saveProjects() not implmented");
-        //$json = json_encode($this->settings, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        // loading project list
+        $json = Storage::get($file);
 
-        /*
-        $prevProjs = null;
+        $prevProjs = $this->mapper->mapArray(
+            $json, array(), GitlabDto::class);
 
-        if (Storage::exists($file)) {
-            $now = Carbon::now();
-            $now->setToStringFormat('Y-m-d-H-i-s');
-            Storage::move($file, $file . '-' . $now);
+        foreach ($prevProjs as $p) {
+            if (in_array($p->id, $projects)) {
+                print("$p->name is already exist!");
+            }
         }
-        */
-        $json = json_encode($projects, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+
+        // replace
 
         Storage::put($file, $json);
     }
