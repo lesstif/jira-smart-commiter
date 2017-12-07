@@ -83,7 +83,7 @@ class GitLabHandler extends DvcsContract
 
         foreach ($jsonProjects as $jp) {
             $gitlab = $this->mapper->map(json_decode(json_encode($jp)), new GitlabDto());
-            $pd = new ProjectDto(null, $gitlab);
+            $pd = new GitlabDto(null, 'V4');
             $projsArray[] = $pd;
         }
 

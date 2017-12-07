@@ -59,23 +59,27 @@ abstract class DvcsContract
      * @param $projects
      * @return mixed
      */
-    protected function saveProjects($projects, $file="projects.json") : void
+    public function saveProjects($projects, $file="projects.json") : void
     {
         Log::info('saveProjects : ');
 
         // loading project list
-        $json = Storage::get($file);
+        $prevProjs = [];
+        if (Storage::exists($file)) {
+            $json = Storage::get($file);
 
-        $prevProjs = $this->mapper->mapArray(
-            $json, array(), GitlabDto::class);
+            $prevProjs = $this->mapper->mapArray(
+                $json, array(), GitlabDto::class);
+        }
 
-        foreach ($prevProjs as $p) {
-            if (in_array($p->id, $projects)) {
+        foreach ($projects as $p) {
+            if (in_array($p->id, $prevProjs)) {
                 Log::debug("$p->name is already exist!");
             }
         }
 
         // replace
-        Storage::put($file, $json);
+        $json = json_encode($prevProjs, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        Storage::put($file, json);
     }
 }

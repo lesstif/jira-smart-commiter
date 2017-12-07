@@ -51,6 +51,11 @@ class GitLabV3Handler extends DvcsContract
             $json, array(), GitlabDto::class
         );
 
+        // add property
+        $projs = array_map(function($proj) {
+            $proj->apiVersion = 'V3';
+        }, $projs);
+
         return $projs;
     }
 

@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-class GitlabDto
+class GitlabDto extends ProjectDto
 {
     /**
      * @var integer
@@ -34,4 +34,11 @@ class GitlabDto
 
     /** @var string last commit date time */
     public $lastCommitDateTime;
+
+    public function __construct($jira, $apiVersion = 'V4')
+    {
+        parent::__construct($jira, $apiVersion);
+
+        $this->dvcsType = 'gitlab';
+    }
 }
