@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\GitlabDto;
+use function foo\func;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -31,12 +32,7 @@ class GitLabV3Handler extends DvcsContract
         ];
     }
 
-    /**
-     * List all Projects.
-     *
-     * @return mixed
-     */
-    public function getProjects($parameters = []): array
+    public function getProjects($parameters = []): \Illuminate\Support\Collection
     {
         $parameters = array_replace($this->options, $parameters);
 
@@ -54,7 +50,7 @@ class GitLabV3Handler extends DvcsContract
         return $projs;
     }
 
-    public function getCommits($projectId, $since = null, $until = null, $options = []): array
+    public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
     {
         $proj = $this->client->repositories()->branches($projectId, $options);
 
@@ -67,7 +63,7 @@ class GitLabV3Handler extends DvcsContract
      * @param $projectId
      * @return array
      */
-    public function getProjectInfo($projectId) : array
+    public function getProjectInfo($projectId) : \Illuminate\Support\Collection
     {
         $proj = $this->client->api('projects')->show($projectId);
 
@@ -79,16 +75,19 @@ class GitLabV3Handler extends DvcsContract
      *
      * @return mixed
      */
-    public function getAllProjects($parameters = []): array
+    public function getAllProjects($parameters = []): \Illuminate\Support\Collection
     {
         $parameters = array_replace($this->options, $parameters);
 
         $json = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
-            $json, [], GitlabDto::class
-            //$json, array(), null
+            $json, collect(), GitlabDto::class
         );
+
+        $projs->transform(function ($item, $key) {
+            return $item->setDvcs('gitlab', 'V3');
+        });
 
         return $projs;
     }

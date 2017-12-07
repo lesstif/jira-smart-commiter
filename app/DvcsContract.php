@@ -39,18 +39,33 @@ abstract class DvcsContract
         }
     }
 
-    abstract public function getProjects($options = []) : array;
+    /**
+     * @param array $options
+     * @return \Illuminate\Support\Collection
+     */
+    abstract public function getProjects($options = []) : \Illuminate\Support\Collection ;
 
     /**
      * List all Projects.
      *
-     * @return mixed
+     * @return \Illuminate\Support\Collection
      */
-    abstract public function getAllProjects($options = []) : array;
+    abstract public function getAllProjects($options = []) : \Illuminate\Support\Collection ;
 
-    abstract public function getProjectInfo($projectId) : array;
+    /**
+     * @param $projectId
+     * @return \Illuminate\Support\Collection
+     */
+    abstract public function getProjectInfo($projectId) : \Illuminate\Support\Collection ;
 
-    abstract public function getCommits($projectId, $since, $until, $options = []) : array;
+    /**
+     * @param $projectId
+     * @param $since
+     * @param $until
+     * @param array $options
+     * @return \Illuminate\Support\Collection
+     */
+    abstract public function getCommits($projectId, $since, $until, $options = []) : \Illuminate\Support\Collection ;
 
     /**
      * save DVCS Project Info.
@@ -60,25 +75,28 @@ abstract class DvcsContract
      */
     public function saveProjects($projects, $file = 'projects.json') : void
     {
-        Log::info('saveProjects : ');
+        Log::info('saveProjects : ' . json_encode($projects));
 
         // loading project list
-        $prevProjs = [];
+        $prevProjs = collect();
+
         if (Storage::exists($file)) {
             $json = Storage::get($file);
 
-            $prevProjs = $this->mapper->mapArray(
-                $json, [], GitlabDto::class);
+            $prevProjs = collect(json_decode($json));
         }
 
         foreach ($projects as $p) {
-            if (in_array($p->id, $prevProjs)) {
-                Log::debug("$p->name is already exist!");
+
+            if ($prevProjs->whereStrict('id', $p->id)->first() !== null) {
+                Log::debug("$p->id $p->name is already exist! ret:");
+            } else {
+                $prevProjs[] = $p;
             }
         }
 
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        Storage::put($file, json);
+        Storage::put($file, $json);
     }
 }

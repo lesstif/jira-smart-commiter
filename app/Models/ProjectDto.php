@@ -17,9 +17,43 @@ abstract class ProjectDto
      */
     public $jira;
 
-    public function __construct($jira, $apiVersion = 'V4')
+    /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var string|null
+     */
+    public $description;
+
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var string
+     */
+    public $web_url;
+
+    /** @var string|null */
+    public $path_with_namespace;
+
+    /** @var UserDto */
+    public $owner;
+
+    /** @var string commit hash */
+    public $lastCommit;
+
+    /** @var string last commit date time */
+    public $lastCommitDateTime;
+
+    abstract function __construct();
+
+    public function setDvcs($dvcsType, $apiVersion)
     {
-        $this->jira = $jira;
+        $this->dvcsType = $dvcsType;
         $this->apiVersion = $apiVersion;
     }
 }
