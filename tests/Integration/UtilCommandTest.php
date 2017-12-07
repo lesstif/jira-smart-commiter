@@ -2,9 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\SmartCommitConfig;
 use Tests\TestCase;
-use App\Commands\HelloCommand;
+use App\SmartCommitConfig;
 
 class UtilCommandTest extends TestCase
 {

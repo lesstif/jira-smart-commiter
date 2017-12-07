@@ -43,12 +43,12 @@ return [
     'disks' => [
         'local' => [
             'driver' => 'local',
-            'root' => getenv('HOME') . DIRECTORY_SEPARATOR .'.smartcommit-local',
+            'root' => getenv('HOME').DIRECTORY_SEPARATOR.'.smartcommit-local',
         ],
 
         'app' => [
             'driver' => 'local',
-            'root' => getenv('HOME') . DIRECTORY_SEPARATOR .'.smartcommit',
+            'root' => getenv('HOME').DIRECTORY_SEPARATOR.'.smartcommit',
         ],
 
     ],

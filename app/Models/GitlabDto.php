@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Models;
 
 class GitlabDto extends ProjectDto
 {
     /**
-     * @var integer
+     * @var int
      */
     public $id;
 

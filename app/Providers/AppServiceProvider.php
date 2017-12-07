@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 

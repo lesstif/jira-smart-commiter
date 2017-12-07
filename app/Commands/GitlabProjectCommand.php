@@ -5,7 +5,6 @@ namespace App\Commands;
 use App\DvcsConnectorFactory;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\SmartCommitBaseCommand;
 
 class GitlabProjectCommand extends Command
 {

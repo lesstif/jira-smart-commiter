@@ -1,30 +1,29 @@
 <?php
+
 namespace App\Models;
 
-
 /**
- * DVCS User Dto
+ * DVCS User Dto.
  *
  * Class UserDto
- * @package App\Models
  */
 class UserDto
 {
-    /** @var  integer */
+    /** @var int */
     public $id;
 
-    /** @var  string */
+    /** @var string */
     public $name;
 
-    /** @var  string */
+    /** @var string */
     public $username;
 
-    /** @var  string */
+    /** @var string */
     public $state;
 
-    /** @var  string|null */
+    /** @var string|null */
     public $avatar_url;
 
-    /** @var  string|null */
+    /** @var string|null */
     public $web_url;
 }

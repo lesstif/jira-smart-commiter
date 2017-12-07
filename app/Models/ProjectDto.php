@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 abstract class ProjectDto
@@ -21,5 +22,4 @@ abstract class ProjectDto
         $this->jira = $jira;
         $this->apiVersion = $apiVersion;
     }
-
 }

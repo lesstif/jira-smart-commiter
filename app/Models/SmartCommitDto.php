@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 /**
@@ -7,7 +8,6 @@ namespace App\Models;
  * @See https://confluence.atlassian.com/bitbucket/processing-jira-software-issues-with-smart-commit-messages-298979931.html
  *
  * Class SmartCommitDto
- * @package App\Models
  */
 class SmartCommitDto
 {
@@ -18,20 +18,20 @@ class SmartCommitDto
                 'resolve',
                 'fix',
             ],
-            'status' => "Resolved",
+            'status' => 'Resolved',
         ],
         [
             'keywords' => [
                 'close',
                 '닫음',
             ],
-            'status' => "Closed",
+            'status' => 'Closed',
         ],
         [
             'keywords' => [
                 'Done',
             ],
-            'status' => "Done",
+            'status' => 'Done',
         ],
     ];
 
@@ -51,5 +51,4 @@ class SmartCommitDto
         '#worklog',
         '#작업시간',
     ];
-
 }
