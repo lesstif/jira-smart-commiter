@@ -101,22 +101,6 @@ class GitLabV3Handler extends DvcsContract
      */
     public function saveProjects($projects, $file="projects.json") : void
     {
-        Log::info('saveProjects : ');
-
-        // loading project list
-        $json = Storage::get($file);
-
-        $prevProjs = $this->mapper->mapArray(
-            $json, array(), GitlabDto::class);
-
-        foreach ($prevProjs as $p) {
-            if (in_array($p->id, $projects)) {
-                print("$p->name is already exist!");
-            }
-        }
-
-        // replace
-
-        Storage::put($file, $json);
+        parent::saveProjects($projects, $file);
     }
 }

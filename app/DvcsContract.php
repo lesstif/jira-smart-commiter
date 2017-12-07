@@ -2,6 +2,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 abstract class DvcsContract
 {
@@ -58,5 +59,23 @@ abstract class DvcsContract
      * @param $projects
      * @return mixed
      */
-    abstract public function saveProjects($projects) : void;
+    protected function saveProjects($projects, $file="projects.json") : void
+    {
+        Log::info('saveProjects : ');
+
+        // loading project list
+        $json = Storage::get($file);
+
+        $prevProjs = $this->mapper->mapArray(
+            $json, array(), GitlabDto::class);
+
+        foreach ($prevProjs as $p) {
+            if (in_array($p->id, $projects)) {
+                Log::debug("$p->name is already exist!");
+            }
+        }
+
+        // replace
+        Storage::put($file, $json);
+    }
 }
