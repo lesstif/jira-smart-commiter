@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-abstract class ProjectDto
+abstract class ProjectDto implements \JsonSerializable
 {
     /**
      * @var string dvscs type
@@ -55,5 +55,10 @@ abstract class ProjectDto
     {
         $this->dvcsType = $dvcsType;
         $this->apiVersion = $apiVersion;
+    }
+
+    public function jsonSerialize()
+    {
+        return array_filter(get_object_vars($this));
     }
 }

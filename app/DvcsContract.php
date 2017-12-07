@@ -78,21 +78,24 @@ abstract class DvcsContract
         Log::info('saveProjects : ' . json_encode($projects));
 
         // loading project list
-        $prevProjs = collect();
+        $prevProjs = [];
 
         if (Storage::exists($file)) {
             $json = Storage::get($file);
 
-            $prevProjs = collect(json_decode($json));
+            $prevProjs = json_decode($json);
         }
 
         foreach ($projects as $p) {
 
-            if ($prevProjs->whereStrict('id', $p->id)->first() !== null) {
-                Log::debug("$p->id $p->name is already exist! ret:");
-            } else {
-                $prevProjs[] = $p;
+            foreach($prevProjs as $idx=>$value) {
+                if ($value->id === $p->id) {
+                    Log::debug("$p->id $p->name is already exist. replacing it. $p->dvcsType");
+                    $prevProjs[$idx] = $p;
+                    break;
+                }
             }
+            $prevProjs[] = $p;
         }
 
         // replace

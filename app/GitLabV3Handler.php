@@ -43,9 +43,10 @@ class GitLabV3Handler extends DvcsContract
         );
 
         // add property
-        $projs = array_map(function ($proj) {
-            $proj->apiVersion = 'V3';
-        }, $projs);
+        $projs->transform(function ($item, $key) {
+            $item->setDvcs('gitlab', 'V3');
+            return $item;
+        });
 
         return $projs;
     }
@@ -86,7 +87,8 @@ class GitLabV3Handler extends DvcsContract
         );
 
         $projs->transform(function ($item, $key) {
-            return $item->setDvcs('gitlab', 'V3');
+            $item->setDvcs('gitlab', 'V3');
+            return $item;
         });
 
         return $projs;
