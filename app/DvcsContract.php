@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Illuminate\Support\Facades\Log;
@@ -6,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 abstract class DvcsContract
 {
-    /** @var SmartCommitConfig  */
+    /** @var SmartCommitConfig */
     protected $config;
 
     protected $debug;
@@ -28,7 +29,7 @@ abstract class DvcsContract
     {
         //Log::debug("Getting '$name'");
 
-        if(empty($this->data)) {
+        if (empty($this->data)) {
             $c = $this->config;
             $this->data = $c->jsonData();
         }
@@ -36,30 +37,28 @@ abstract class DvcsContract
         if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         }
-
-        return null;
     }
 
-    abstract public function getProjects($options = []) : array ;
+    abstract public function getProjects($options = []) : array;
 
     /**
-     * List all Projects
+     * List all Projects.
      *
      * @return mixed
      */
-    abstract public function getAllProjects($options = []) : array ;
+    abstract public function getAllProjects($options = []) : array;
 
-    abstract public function getProjectInfo($projectId) : array ;
+    abstract public function getProjectInfo($projectId) : array;
 
-    abstract public function getCommits($projectId, $since, $until, $options = []) : array ;
+    abstract public function getCommits($projectId, $since, $until, $options = []) : array;
 
     /**
-     * save DVCS Project Info
+     * save DVCS Project Info.
      *
      * @param $projects
      * @return mixed
      */
-    public function saveProjects($projects, $file="projects.json") : void
+    public function saveProjects($projects, $file = 'projects.json') : void
     {
         Log::info('saveProjects : ');
 
@@ -69,7 +68,7 @@ abstract class DvcsContract
             $json = Storage::get($file);
 
             $prevProjs = $this->mapper->mapArray(
-                $json, array(), GitlabDto::class);
+                $json, [], GitlabDto::class);
         }
 
         foreach ($projects as $p) {
@@ -79,7 +78,7 @@ abstract class DvcsContract
         }
 
         // replace
-        $json = json_encode($prevProjs, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         Storage::put($file, json);
     }
 }

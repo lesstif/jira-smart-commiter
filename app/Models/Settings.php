@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models;
 
 /**
- * Class Settings
- * @package App
+ * Class Settings.
  */
-class Settings implements \JsonSerializable {
+class Settings implements \JsonSerializable
+{
     public $jiraHost = 'https://you-jira.host.com';
     public $jiraUser = 'jira-username';
     public $jiraPass = 'jira-password';
@@ -20,7 +21,7 @@ class Settings implements \JsonSerializable {
     public $gitlabHost = 'https://your-gitlab.host.com';
     public $gitlabToken = 'gitlab-token-here';
 
-    /** @var  SmartCommitDto  */
+    /** @var SmartCommitDto */
     public $smartCommit;
 
     public function __construct()
@@ -29,7 +30,7 @@ class Settings implements \JsonSerializable {
     }
 
     /**
-     * Specify data which should be serialized to JSON
+     * Specify data which should be serialized to JSON.
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.

@@ -1,14 +1,11 @@
 <?php
+
 namespace App;
 
+use GitLab\Client;
+use Gitlab\ResultPager;
 use App\Models\GitlabDto;
-use App\Models\ProjectDto;
-use \GitLab\Client;
 use Gitlab\Model\Project;
-use \Gitlab\ResultPager;
-
-use Illuminate\Support\Facades\Log;
-use JsonMapper;
 
 class GitLabHandler extends DvcsContract
 {
@@ -30,7 +27,7 @@ class GitLabHandler extends DvcsContract
     }
 
     /**
-     * List all Projects
+     * List all Projects.
      *
      * @return mixed
      */
@@ -50,7 +47,7 @@ class GitLabHandler extends DvcsContract
     }
 
     /**
-     * get Project Info
+     * get Project Info.
      *
      * @param $projectId
      * @return array
@@ -63,7 +60,7 @@ class GitLabHandler extends DvcsContract
     }
 
     /**
-     * List all Projects
+     * List all Projects.
      *
      * @return mixed
      */
@@ -89,5 +86,4 @@ class GitLabHandler extends DvcsContract
 
         return $projsArray;
     }
-
 }

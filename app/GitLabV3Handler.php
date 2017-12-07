@@ -1,13 +1,8 @@
 <?php
+
 namespace App;
 
 use App\Models\GitlabDto;
-use \GitLab\Client;
-use \Gitlab\ResultPager;
-
-use Illuminate\Support\Facades\Log;
-use App\Exceptions\NotImplmentationException;
-use Illuminate\Support\Facades\Storage;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -37,7 +32,7 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * List all Projects
+     * List all Projects.
      *
      * @return mixed
      */
@@ -48,11 +43,11 @@ class GitLabV3Handler extends DvcsContract
         $json = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
-            $json, array(), GitlabDto::class
+            $json, [], GitlabDto::class
         );
 
         // add property
-        $projs = array_map(function($proj) {
+        $projs = array_map(function ($proj) {
             $proj->apiVersion = 'V3';
         }, $projs);
 
@@ -67,7 +62,7 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * get Project Info
+     * get Project Info.
      *
      * @param $projectId
      * @return array
@@ -80,7 +75,7 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * List all Projects
+     * List all Projects.
      *
      * @return mixed
      */
@@ -91,7 +86,7 @@ class GitLabV3Handler extends DvcsContract
         $json = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
-            $json, array(), GitlabDto::class
+            $json, [], GitlabDto::class
             //$json, array(), null
         );
 
@@ -99,12 +94,12 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * save DVCS Project Info
+     * save DVCS Project Info.
      *
      * @param $projects
      * @return mixed
      */
-    public function saveProjects($projects, $file="projects.json") : void
+    public function saveProjects($projects, $file = 'projects.json') : void
     {
         parent::saveProjects($projects, $file);
     }

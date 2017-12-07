@@ -1,4 +1,7 @@
 <?php
+
 namespace App\Exceptions;
 
-class NotImplmentationException extends \Exception {}
+class NotImplmentationException extends \Exception
+{
+}

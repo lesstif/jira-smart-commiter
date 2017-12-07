@@ -2,10 +2,9 @@
 
 namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\GitLabHandler;
 use Symfony\Component\VarDumper\VarDumper;
-use Tests\TestCase;
-use App\Commands\HelloCommand;
 
 class GitLabCommandTest extends TestCase
 {

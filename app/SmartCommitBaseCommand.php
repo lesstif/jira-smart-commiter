@@ -1,18 +1,18 @@
 <?php
+
 namespace App;
 
 use LaravelZero\Framework\Commands\Command;
 
 class SmartCommitBaseCommand extends Command
 {
-    protected $handler ;
+    protected $handler;
 
     protected $config;
 
     public function __construct()
     {
         parent::__construct();
-
     }
 
     /**
@@ -35,7 +35,5 @@ class SmartCommitBaseCommand extends Command
         */
 
         $handler = DvcsConnectorFactory::create();
-
-
     }
 }

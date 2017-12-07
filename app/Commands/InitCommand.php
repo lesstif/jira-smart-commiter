@@ -4,13 +4,13 @@ namespace App\Commands;
 
 use App\Models\Settings;
 use App\SmartCommitConfig;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use Illuminate\Support\Facades\Storage;
 
 class InitCommand extends Command
 {
-    private $config ;
+    private $config;
 
     /**
      * The name and signature of the console command.
