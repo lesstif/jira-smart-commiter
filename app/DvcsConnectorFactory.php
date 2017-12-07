@@ -16,8 +16,13 @@ class DvcsConnectorFactory
 
         $dvcsType = $config->getSettings()->dvcsType;
 
+        return createByType($dvcsType);
+    }
+
+    public static function createByType($dvcsType) : DvcsContract
+    {
         if (empty($dvcsType)) {
-            throw new SmartCommitException('DVCS Type not found');
+            throw new SmartCommitException('DVCS Type not supplied');
         }
 
         switch ($dvcsType) {

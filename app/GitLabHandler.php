@@ -31,7 +31,7 @@ class GitLabHandler extends DvcsContract
      *
      * @return mixed
      */
-    public function getProjects($parameters = []): array
+    public function getProjects($parameters = []): \Illuminate\Support\Collection
     {
         // fetch all project
         $jsonProjects = $this->client->projects()->all($parameters);
@@ -39,7 +39,7 @@ class GitLabHandler extends DvcsContract
         return $this->parseProjectArray($jsonProjects);
     }
 
-    public function getCommits($projectId, $since = null, $until = null, $options = []): array
+    public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
     {
         $proj = $this->client->repositories()->branches($projectId, $options);
 
@@ -52,7 +52,7 @@ class GitLabHandler extends DvcsContract
      * @param $projectId
      * @return array
      */
-    public function getProjectInfo($projectId) : array
+    public function getProjectInfo($projectId) : \Illuminate\Support\Collection
     {
         $proj = $this->client->projects()->show($projectId);
 
@@ -64,7 +64,7 @@ class GitLabHandler extends DvcsContract
      *
      * @return mixed
      */
-    public function getAllProjects($options = []): array
+    public function getAllProjects($options = []): \Illuminate\Support\Collection
     {
         // fetch all project
         $pager = new ResultPager($this->client);
@@ -74,14 +74,13 @@ class GitLabHandler extends DvcsContract
         return $this->parseProjectArray($jsonProjects);
     }
 
-    private function parseProjectArray($jsonProjects) : array
+    private function parseProjectArray($jsonProjects) : \Illuminate\Support\Collection
     {
-        $projsArray = [];
+        $projsArray = collect();
 
         foreach ($jsonProjects as $jp) {
             $gitlab = $this->mapper->map(json_decode(json_encode($jp)), new GitlabDto());
-            $pd = new GitlabDto(null, 'V4');
-            $projsArray[] = $pd;
+            $projsArray->push($gitlab);
         }
 
         return $projsArray;

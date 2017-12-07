@@ -2,6 +2,9 @@
 
 namespace App\Commands;
 
+use App\DvcsConnectorFactory;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -40,10 +43,40 @@ class GitlabCommitCommand extends Command
      */
     public function handle(): void
     {
-        $since = $this->option('since');
-        $until = $this->option('until');
+        $sinceOpt = $this->option('since');
+        $untilOpt = $this->option('until') ?? 'now';
 
-        $this->info("commit fetch function not yet impl! $since, $until");
+        $since = null;
+        $until = null;
+
+        $dateFormats = ['Y-m-d H:i:s', 'Y-m-d H:i', 'Y-m-d H', 'Y-m-d'];
+
+        if (!empty($sinceOpt)) {
+            foreach($dateFormats as $format) {
+                $since = DateTime::createFromFormat($format, $sinceOpt);
+                if ($since instanceof DateTime)
+                    break;
+            }
+
+            if (! $since instanceof DateTime)
+                $this->error("'$sinceOpt' Invalid DateTime Format! ");
+
+            //Carbon::createFromFormat();
+        }
+
+        // step 1. load project config
+        $projs = [];
+
+        // steap2.
+        foreach($projs as $p) {
+            // sync now
+
+            // fetch commit
+        }
+
+        // DvcsConnectorFactory::createByType('git');
+
+        $this->info("commit fetch function not yet impl! $sinceOpt, $untilOpt");
     }
 
     /**

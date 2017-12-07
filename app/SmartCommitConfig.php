@@ -21,9 +21,6 @@ class SmartCommitConfig
      */
     private $settings;
 
-    /** @var array */
-    private $projects;
-
     private $data;
 
     public function __construct()
@@ -92,7 +89,7 @@ class SmartCommitConfig
      * @throws SmartCommitException
      * @throws \JsonMapper_Exception
      */
-    public function loadProjects($file = 'projects.json')
+    static public function loadProjects($file = 'projects.json') :  \Illuminate\Support\Collection
     {
         if (! Storage::exists($file)) {
             throw new SmartCommitException('Config file '.$file." Not found. running 'php jira-smart-config init' ");
@@ -102,11 +99,13 @@ class SmartCommitConfig
 
         $mapper = new JsonMapper();
 
-        $this->projects = $mapper->mapArray(
+        $projects = $mapper->mapArray(
             json_decode($json),
-            [],
+            collect(),
             new Project()
         );
+
+        return $projects;
     }
 
     public function saveProjects($file = 'projects.json', $overwrite = false)
