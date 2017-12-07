@@ -28,7 +28,6 @@ class ProjectDto
      */
     public $jira;
 
-
     public function __construct($jira = null, $gitlab = null, $github = null, $bitBucket = null)
     {
         $this->jira = $jira;

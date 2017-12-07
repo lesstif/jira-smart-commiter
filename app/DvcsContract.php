@@ -5,13 +5,16 @@ use Illuminate\Support\Facades\Log;
 
 abstract class DvcsContract
 {
+    /** @var SmartCommitConfig  */
     protected $config;
 
     protected $debug;
     protected $verbose;
 
+    /** @var array */
     protected $data;
 
+    /** @var \JsonMapper */
     protected $mapper;
 
     public function __construct(SmartCommitConfig $config)

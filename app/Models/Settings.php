@@ -20,38 +20,12 @@ class Settings implements \JsonSerializable {
     public $gitlabHost = 'https://your-gitlab.host.com';
     public $gitlabToken = 'gitlab-token-here';
 
-    public $transitions_comment = '{USER} Issue {TRANSITION} with {COMMIT}';
-    public $transitions = [
-        [
-            'name' => "Resolved",
-            'keywords' => [
-                'resolve',
-                'fix',
-            ],
-        ],
-        [
-            'name' => "Closed",
-            'keywords' => [
-                'close',
-                '닫음',
-            ],
-        ],
-    ];
+    /** @var  SmartCommitDto  */
+    public $smartCommit;
 
-    public $referencing_comment = '{USER} mentioned this issue in {COMMIT}';
-    public $referencing = [
-        'ref',
-        '참조',
-    ];
-
-    public $merging_comment = '{USER} {COMMIT_MESSAGE} with  issue in {COMMIT}';
-    public $merging = [
-        'merge',
-    ];
-
-    function __construct()
+    public function __construct()
     {
-
+        $this->smartCommit = new SmartCommitDto();
     }
 
     /**

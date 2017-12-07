@@ -37,8 +37,6 @@ class SmartCommitConfig
      */
     public function getProperty($name)
     {
-        echo "Getting '$name'\n";
-
         $this->data = $this->settings->jsonSerialize();
 
         if (array_key_exists($name, $this->data)) {

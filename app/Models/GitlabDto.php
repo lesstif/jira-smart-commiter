@@ -25,4 +25,7 @@ class GitlabDto
 
     /** @var UserDto */
     public $owner;
+
+    /** @var string commit hash */
+    public $lastCommit;
 }

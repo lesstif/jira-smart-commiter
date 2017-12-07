@@ -7,6 +7,7 @@ use \Gitlab\ResultPager;
 
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\NotImplmentationException;
+use Illuminate\Support\Facades\Storage;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -42,10 +43,8 @@ class GitLabV3Handler extends DvcsContract
 
         $json = $this->client->request('projects/');
 
-        dd($json);
-
-        $projs = $this->mapper->map(
-            $json, new GitlabDto()
+        $projs = $this->mapper->mapArray(
+            $json, array(), GitlabDto::class
         );
 
         return $projs;
@@ -78,10 +77,21 @@ class GitLabV3Handler extends DvcsContract
      */
     public function getAllProjects($options = []): array
     {
-        // fetch all project
-        $pager = new ResultPager($this->client);
+        $default = [
+            'page' => 1,
+            'per_page' => 100,
+            'order_by' =>  'created_at',
+            'sort' => 'asc',
+        ];
 
-        return $pager->fetchall($this->client->projects(), 'all', [$options]);
+        $json = $this->client->request('projects/');
+
+        $projs = $this->mapper->mapArray(
+            //$json, array(), GitlabDto::class
+            $json, array(), null
+        );
+
+        return $projs;
     }
 
     /**
@@ -90,9 +100,25 @@ class GitLabV3Handler extends DvcsContract
      * @param $projects
      * @return mixed
      */
-    public function saveProjects($projects) : void
+    public function saveProjects($projects, $file="projects.json") : void
     {
+        Log::info('saveProjects : ');
+
         // TODO: Implement saveProjects() method.
-        return NotImplmentationException("saveProjects() not implmented");
+        //return NotImplmentationException("saveProjects() not implmented");
+        //$json = json_encode($this->settings, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+
+        /*
+        $prevProjs = null;
+
+        if (Storage::exists($file)) {
+            $now = Carbon::now();
+            $now->setToStringFormat('Y-m-d-H-i-s');
+            Storage::move($file, $file . '-' . $now);
+        }
+        */
+        $json = json_encode($projects, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+
+        Storage::put($file, $json);
     }
 }
