@@ -69,12 +69,9 @@ abstract class DvcsContract
     public function saveProjects($projects, $file = 'projects.json') : void
     {
         Log::info('saveProjects : '.count($projects));
-        Storage::put("abcd.json", json_encode($projects));
 
         // loading project list
         $prevProjs = SmartCommitConfig::loadProjects(false);
-
-        Log::debug("Before Project count:".count($prevProjs));
 
         $cnt = 0;
         foreach ($projects as $p) {
@@ -82,7 +79,7 @@ abstract class DvcsContract
             Log::info($cnt++."process $p->id $p->name .. $p->dvcsType");
             foreach ($prevProjs as $idx=>$value) {
                 if ($value->id === $p->id) {
-                    Log::debug("$idx : $p->id $p->name is already exist. replacing it. $p->dvcsType");
+                    //Log::debug("$idx : $p->id $p->name is already exist. replacing it. $p->dvcsType");
                     $prevProjs[$idx] = $p;
                     $found = true;
                     break;
@@ -93,7 +90,6 @@ abstract class DvcsContract
                 Log::debug("$p->id $p->name is insert . $p->dvcsType " .count($prevProjs));
             }
         }
-        Log::debug("After Project count:".count($prevProjs));
 
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

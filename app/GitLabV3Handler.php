@@ -85,10 +85,8 @@ class GitLabV3Handler extends DvcsContract
 
         $response = $this->client->request('projects/', $parameters);
 
-        $json = json_decode($response->getBody());
-
         $projs = $this->mapper->mapArray(
-            $json, collect(), GitlabDto::class
+            json_decode($response->getBody()), collect(), GitlabDto::class
         );
 
         while( ($next = $this->hasNext($response)) != null) {
@@ -101,12 +99,11 @@ class GitLabV3Handler extends DvcsContract
             $response = $htc->requestNoParam($next);
 
             $tmp = $this->mapper->mapArray(
-                $json, collect(), GitlabDto::class
+                json_decode($response->getBody()), collect(), GitlabDto::class
             );
             $projs = $projs->merge($tmp);
 
-            Log::debug("Fetched ".count($tmp).",Total:".count($projs));
-
+            //Log::debug("Fetched ".count($tmp).",Total:".count($projs));
         }
 
         $projs->transform(function ($item, $key) {
@@ -130,6 +127,8 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
+     * gitlab api v3 pagination processing
+     *
      * @param $response
      * @return string next url
      */

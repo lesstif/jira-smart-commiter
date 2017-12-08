@@ -58,7 +58,7 @@ class HttpClient
             // TODO $queryParam process
             'query' => [
                 'page' => $option['page'] ?? 1,
-                'per_page' => $option['per_page'] ?? 29,
+                'per_page' => $option['per_page'] ?? 50,
             ],
             'headers' => [
                 'PRIVATE-TOKEN' => $this->gitLabToken,
