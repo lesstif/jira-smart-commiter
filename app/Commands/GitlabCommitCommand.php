@@ -2,17 +2,14 @@
 
 namespace App\Commands;
 
-use App\DvcsContract;
-use App\Models\ProjectDto;
-use App\SmartCommitConfig;
 use DateTime;
 use Carbon\Carbon;
+use App\Models\ProjectDto;
+use App\SmartCommitConfig;
 use App\DvcsConnectorFactory;
-use Illuminate\Console\Scheduling\CacheMutex;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\Storage;
-use LaravelZero\Framework\Commands\Command;
 use Illuminated\Console\WithoutOverlapping;
+use LaravelZero\Framework\Commands\Command;
 
 class GitlabCommitCommand extends Command
 {
@@ -67,11 +64,13 @@ class GitlabCommitCommand extends Command
 
         $idOrName = $this->option('idOrName');
 
-        if (empty($config))
+        if (empty($config)) {
             $config = 'settings.json';
+        }
 
-        if (empty($project))
+        if (empty($project)) {
             $project = 'projects.json';
+        }
 
         $since = null;
         $until = null;

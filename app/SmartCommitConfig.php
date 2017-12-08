@@ -2,11 +2,11 @@
 
 namespace App;
 
-use App\Models\ProjectDto;
 use JsonMapper;
 use Carbon\Carbon;
 use App\Models\Settings;
 use Gitlab\Model\Project;
+use App\Models\ProjectDto;
 use Illuminate\Support\Facades\Storage;
 use App\Exceptions\SmartCommitException;
 
@@ -92,7 +92,7 @@ class SmartCommitConfig
     /**
      * load DVCS Project list from json.
      *
-     * @param boolean $throwException
+     * @param bool $throwException
      * @param string $file
      * @throws SmartCommitException
      * @throws \JsonMapper_Exception
@@ -100,10 +100,11 @@ class SmartCommitConfig
     public static function loadProjects($throwException, $file = 'projects.json') :  \Illuminate\Support\Collection
     {
         if (! Storage::exists($file)) {
-            if ($throwException === true)
+            if ($throwException === true) {
                 throw new SmartCommitException('Project Setting file '.$file." Not found. running 'php jira-smart-config project:create-list' ");
-            else
+            } else {
                 return collect();
+            }
         }
 
         $json = Storage::get($file);

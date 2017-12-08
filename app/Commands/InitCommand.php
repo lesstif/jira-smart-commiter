@@ -48,13 +48,14 @@ class InitCommand extends Command
     {
         $config = $this->option('config');
 
-        if (empty($config))
-            $config= 'settings.json';
+        if (empty($config)) {
+            $config = 'settings.json';
+        }
 
         $this->config->saveSettings($config);
 
         // check and create file mutex directory
-        if (!Storage::exists('app')) {
+        if (! Storage::exists('app')) {
             Storage::makeDirectory('app');
         }
 

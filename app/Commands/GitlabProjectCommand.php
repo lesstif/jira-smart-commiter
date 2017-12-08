@@ -17,7 +17,6 @@ class GitlabProjectCommand extends Command
                             {--config= : Use file instead of settings.json}
                             {--project= : Save to out instead of projects.json}';
 
-
     /**
      * The console command description.
      *
@@ -45,11 +44,13 @@ class GitlabProjectCommand extends Command
         $config = $this->option('config');
         $projFile = $this->option('project');
 
-        if (empty($config))
-            $config= 'settings.json';
+        if (empty($config)) {
+            $config = 'settings.json';
+        }
 
-        if (empty($projFile))
-            $projFile= 'projects.json';
+        if (empty($projFile)) {
+            $projFile = 'projects.json';
+        }
 
         $dvcsHandler = DvcsConnectorFactory::create($config);
 

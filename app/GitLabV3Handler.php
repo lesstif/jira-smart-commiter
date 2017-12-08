@@ -64,14 +64,14 @@ class GitLabV3Handler extends DvcsContract
      */
     public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
     {
-        $url = sprintf("projects/%d/repository/commits", $projectId);
-        $response = $this->client->request($url , $options);
+        $url = sprintf('projects/%d/repository/commits', $projectId);
+        $response = $this->client->request($url, $options);
 
         $commits = $this->mapper->mapArray(
             json_decode($response->getBody()), collect(), CommitDto::class
         );
 
-        while( ($next = $this->hasNext($response)) != null) {
+        while (($next = $this->hasNext($response)) != null) {
             Log::debug("fetch next commit data..$next\n");
             $gitlabHost = $this->config->getProperty('gitlabHost');
             $gitlabToken = $this->config->getProperty('gitlabToken');
@@ -85,7 +85,7 @@ class GitLabV3Handler extends DvcsContract
             );
             $commits = $commits->merge($tmp);
 
-            Log::debug("Fetched ".count($tmp).",Total:".count($commits));
+            Log::debug('Fetched '.count($tmp).',Total:'.count($commits));
         }
 
         return $commits;
@@ -119,7 +119,7 @@ class GitLabV3Handler extends DvcsContract
             json_decode($response->getBody()), collect(), GitlabDto::class
         );
 
-        while( ($next = $this->hasNext($response)) != null) {
+        while (($next = $this->hasNext($response)) != null) {
             //Log::debug("fetch next data..$next\n");
             $gitlabHost = $this->config->getProperty('gitlabHost');
             $gitlabToken = $this->config->getProperty('gitlabToken');
@@ -146,7 +146,7 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * gitlab api v3 pagination processing
+     * gitlab api v3 pagination processing.
      *
      * @param $response
      * @return string next url
@@ -157,21 +157,20 @@ class GitLabV3Handler extends DvcsContract
         $link = $response->getHeader('Link');
 
         // no more data
-        if (empty($link))
-            return null;
+        if (empty($link)) {
+            return;
+        }
 
-        $ar = preg_split("/,/", $link[0]);
+        $ar = preg_split('/,/', $link[0]);
 
         $found = false;
         $next = null;
 
-        foreach($ar as $l) {
+        foreach ($ar as $l) {
             // format: <https://gitlab.example.com/api/v3/projects?page=2&per_page=100>; rel="next"
             if (preg_match('/<(.*)>;[ \t]*rel="next"/', $l, $next) === 1) {
                 return $next[1];
             }
         }
-
-        return null;
     }
 }
