@@ -29,7 +29,9 @@ class GitlabCommitCommand extends Command
      */
     protected $signature = 'commit:fetch
                             {--since= : Only commits after or on this date will be returned in format YYYY-MM-DDTHH:MM:SSZ}
-                            {--until= : Only commits before or on this date will be returned }';
+                            {--until= : Only commits before or on this date will be returned }
+                            {--config= : Use file instead of settings.json}
+                            {--project= : Save to out instead of projects.json}';
 
     /**
      * The console command description.
@@ -58,6 +60,15 @@ class GitlabCommitCommand extends Command
         $sinceOpt = $this->option('since');
         $untilOpt = $this->option('until') ?? 'now';
 
+        $config = $this->option('config');
+        $project = $this->option('project');
+
+        if (empty($config))
+            $config = 'settings.json';
+
+        if (empty($project))
+            $project = 'projects.json';
+
         $since = null;
         $until = null;
 
@@ -80,7 +91,7 @@ class GitlabCommitCommand extends Command
         }
 
         // step 1. load project config
-        $projs = SmartCommitConfig::loadProjects();
+        $projs = SmartCommitConfig::loadProjects($project);
 
         // step 2.
         $idx = 0;
@@ -91,8 +102,10 @@ class GitlabCommitCommand extends Command
             $commits = $dvcs->getCommits($p->id, $since, $until);
 
             // fetch commit
-            //$this->info("$p->name");
-            if ($idx++ == 10) dd(1);
+            $this->info("$p->name");
+            if ($idx++ == 10) {
+                dd(1);
+            }
         }
 
         // DvcsConnectorFactory::createByType('git');

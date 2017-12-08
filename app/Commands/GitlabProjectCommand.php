@@ -13,7 +13,10 @@ class GitlabProjectCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'project:create-list';
+    protected $signature = 'project:create-list
+                            {--config= : Use file instead of settings.json}
+                            {--project= : Save to out instead of projects.json}';
+
 
     /**
      * The console command description.
@@ -39,11 +42,20 @@ class GitlabProjectCommand extends Command
      */
     public function handle(): void
     {
+        $config = $this->option('config');
+        $project = $this->option('project');
+
+        if (empty($config))
+            $config= 'settings.json';
+
+        if (empty($project))
+            $project= 'projects.json';
+
         $dvcsHandler = DvcsConnectorFactory::create();
 
         $projects = $dvcsHandler->getAllProjects(['membership' => true, 'archived' => false]);
 
-        $cnt = $dvcsHandler->saveProjects($projects);
+        $cnt = $dvcsHandler->saveProjects($projects, $project);
 
         $this->info('total saved project count:'.$cnt);
     }

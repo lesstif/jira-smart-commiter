@@ -8,11 +8,11 @@ use App\Exceptions\NotImplmentationException;
 
 class DvcsConnectorFactory
 {
-    public static function create() : DvcsContract
+    public static function create($file = 'settings.json') : DvcsContract
     {
         $config = new SmartCommitConfig();
 
-        $config->loadSettings();
+        $config->loadSettings($file);
 
         $dvcsType = $config->getSettings()->dvcsType;
 

@@ -17,7 +17,8 @@ class InitCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'init';
+    protected $signature = 'init
+                            {--config= : Use file instead of settings.json}';
 
     /**
      * The console command description.
@@ -45,7 +46,12 @@ class InitCommand extends Command
      */
     public function handle(): void
     {
-        $this->config->saveSettings();
+        $config = $this->option('config');
+
+        if (empty($config))
+            $config= 'settings.json';
+
+        $this->config->saveSettings($config);
 
         // check and create file mutex directory
         if (!Storage::exists('app')) {
@@ -53,7 +59,7 @@ class InitCommand extends Command
         }
 
         $this->info('initial config generation done.!');
-        $this->info("Edit the '~/.smartcommit/settings.json' to suit your environment. ");
+        $this->info("Edit the '~/.smartcommit/${config}' to suit your environment. ");
     }
 
     /**
