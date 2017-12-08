@@ -64,9 +64,9 @@ abstract class DvcsContract
      * save DVCS Project Info.
      *
      * @param $projects
-     * @return mixed
+     * @return int total project count
      */
-    public function saveProjects($projects, $file = 'projects.json') : void
+    public function saveProjects($projects, $file = 'projects.json') : int
     {
         Log::info('saveProjects : '.count($projects));
 
@@ -94,5 +94,7 @@ abstract class DvcsContract
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         Storage::put($file, $json);
+
+        return $prevProjs->count();
     }
 }

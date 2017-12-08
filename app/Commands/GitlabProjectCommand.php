@@ -43,9 +43,9 @@ class GitlabProjectCommand extends Command
 
         $projects = $dvcsHandler->getAllProjects(['membership' => true, 'archived' => false]);
 
-        $dvcsHandler->saveProjects($projects);
+        $cnt = $dvcsHandler->saveProjects($projects);
 
-        //$this->info('project list create function not yet impl!');
+        $this->info('total saved project count:'.$cnt);
     }
 
     /**

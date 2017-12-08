@@ -116,17 +116,6 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * save DVCS Project Info.
-     *
-     * @param $projects
-     * @return mixed
-     */
-    public function saveProjects($projects, $file = 'projects.json') : void
-    {
-        parent::saveProjects($projects, $file);
-    }
-
-    /**
      * gitlab api v3 pagination processing
      *
      * @param $response
