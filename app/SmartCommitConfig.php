@@ -60,11 +60,11 @@ class SmartCommitConfig
 
     public function loadSettings($file = 'settings.json')
     {
-        if (! Storage::exists($file)) {
+        if (! Storage::disk('app-dir')->exists($file)) {
             throw new SmartCommitException('Config file '.$file." Not found. running 'php jira-smart-config init' ");
         }
 
-        $json = Storage::get($file);
+        $json = Storage::disk('app-dir')->get($file);
 
         $mapper = new JsonMapper();
 
@@ -80,13 +80,13 @@ class SmartCommitConfig
     {
         $json = json_encode($this->settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        if (Storage::exists($file) && $overwrite !== true) {
+        if (Storage::disk('app-dir')->exists($file) && $overwrite !== true) {
             $now = Carbon::now();
             $now->setToStringFormat('Y-m-d-H-i-s');
-            Storage::move($file, $file.'-'.$now);
+            Storage::disk('app-dir')->move($file, $file.'-'.$now);
         }
 
-        Storage::put($file, $json);
+        Storage::disk('app-dir')->put($file, $json);
     }
 
     /**
@@ -99,7 +99,7 @@ class SmartCommitConfig
      */
     public static function loadProjects($throwException, $file = 'projects.json') :  \Illuminate\Support\Collection
     {
-        if (! Storage::exists($file)) {
+        if (! Storage::disk('app-dir')->exists($file)) {
             if ($throwException === true) {
                 throw new SmartCommitException('Project Setting file '.$file." Not found. running 'php jira-smart-config project:create-list' ");
             } else {
@@ -107,7 +107,7 @@ class SmartCommitConfig
             }
         }
 
-        $json = Storage::get($file);
+        $json = Storage::disk('app-dir')->get($file);
 
         $mapper = new JsonMapper();
 
@@ -124,12 +124,12 @@ class SmartCommitConfig
     {
         $json = json_encode($this->projects, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        if (Storage::exists($file) && $overwrite !== true) {
+        if (Storage::disk('app-dir')->exists($file) && $overwrite !== true) {
             $now = Carbon::now();
             $now->setToStringFormat('Y-m-d-H-i-s');
             Storage::move($file, $file.'-'.$now);
         }
 
-        Storage::put($file, $json);
+        Storage::disk('app-dir')->put($file, $json);
     }
 }

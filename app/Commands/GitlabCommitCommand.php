@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Exceptions\SmartCommitException;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\ProjectDto;
@@ -95,6 +96,26 @@ class GitlabCommitCommand extends Command
 
         // step 1. load project config
         $projs = SmartCommitConfig::loadProjects($project);
+
+        if (!empty($idOrName)) {
+            $this->info("Project $idOrName ");
+            $proj = $projs->where('id', $idOrName)->first() ?? $projs->where('name', $idOrName)->first();
+
+            if ($proj === null){
+                throw new SmartCommitException("Project '$idOrName' not found!");
+            }
+
+            // sync now
+            $dvcs = DvcsConnectorFactory::createByType($proj->dvcsType, $proj->apiVersion);
+
+            $commits = $dvcs->getCommits($proj->id, $since, $until);
+
+            // fetch commit
+            $this->info("$proj->name has total commit:".count($commits));
+            if (count($commits) > 0) {
+                dump($commits);
+            }
+        }
 
         // step 2.
         foreach ($projs as $p) {

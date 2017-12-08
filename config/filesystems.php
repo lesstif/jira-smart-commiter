@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'app'),
+    'default' => 'app-dir',
 
     /*
     |--------------------------------------------------------------------------
@@ -46,7 +46,7 @@ return [
             'root' => getenv('HOME').DIRECTORY_SEPARATOR.'.smartcommit-local',
         ],
 
-        'app' => [
+        'app-dir' => [
             'driver' => 'local',
             'root' => getenv('HOME').DIRECTORY_SEPARATOR.'.smartcommit',
         ],

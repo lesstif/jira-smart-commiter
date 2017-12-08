@@ -55,8 +55,8 @@ class InitCommand extends Command
         $this->config->saveSettings($config);
 
         // check and create file mutex directory
-        if (! Storage::exists('app')) {
-            Storage::makeDirectory('app');
+        if (! Storage::disk('app-dir')->exist('app')) {
+            Storage::disk('app-dir')->makeDirectory('app');
         }
 
         $this->info('initial config generation done.!');

@@ -43,7 +43,7 @@ class GitLabHandler extends DvcsContract
     {
         $proj = $this->client->repositories()->branches($projectId, $options);
 
-        return $proj;
+        return collect($proj);
     }
 
     /**
