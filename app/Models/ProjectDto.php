@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-abstract class ProjectDto implements \JsonSerializable
+class ProjectDto implements \JsonSerializable
 {
     /**
      * @var string dvscs type
@@ -48,8 +48,6 @@ abstract class ProjectDto implements \JsonSerializable
 
     /** @var string last commit date time */
     public $lastCommitDateTime;
-
-    abstract public function __construct();
 
     public function setDvcs($dvcsType, $apiVersion)
     {

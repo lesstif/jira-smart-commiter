@@ -15,12 +15,12 @@ class GitLabHandler extends DvcsContract
      * GitLabHandler constructor.
      * @param SmartCommitConfig $config
      */
-    public function __construct(SmartCommitConfig $config)
+    public function __construct()
     {
-        parent::__construct($config);
+        parent::__construct();
 
-        $gitlabHost = $this->getProperty('gitlabHost');
-        $gitlabToken = $this->getProperty('gitlabToken');
+        $gitlabHost = $this->config->getProperty('gitlabHost');
+        $gitlabToken = $this->config->getProperty('gitlabToken');
 
         $this->client = \Gitlab\Client::create($gitlabHost)
             ->authenticate($gitlabToken, Client::AUTH_URL_TOKEN);

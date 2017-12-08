@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\ProjectDto;
 use JsonMapper;
 use Carbon\Carbon;
 use App\Models\Settings;
@@ -26,6 +27,12 @@ class SmartCommitConfig
     public function __construct()
     {
         $this->settings = new Settings();
+    }
+
+    public function setDvcsTypeAndVersion($dvcsType, $apiVersion)
+    {
+        $this->settings->dvcsType = $dvcsType;
+        $this->settings->gitlabApiVersion = $apiVersion;
     }
 
     /**
@@ -102,7 +109,7 @@ class SmartCommitConfig
         $projects = $mapper->mapArray(
             json_decode($json),
             collect(),
-            Project::class
+            ProjectDto::class
         );
 
         return $projects;

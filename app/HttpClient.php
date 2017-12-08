@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Exceptions\SmartCommitException;
+use Illuminate\Support\Facades\Log;
 
 class HttpClient
 {
@@ -47,16 +48,25 @@ class HttpClient
      * @param $uri API uri
      * @return string json string
      */
-    public function request($uri, $queryParam = [], $option = [])
+    public function request($uri, $queryParam = [], $option = []) : \GuzzleHttp\Psr7\Response
     {
         $basket = array_replace($this->defaultConfig, $option, ['base_uri' => $this->gitLabHost]);
 
         $client = new \GuzzleHttp\Client($basket);
 
-        $response = $client->get($this->gitLabHost.$this->API_VERSION.$uri, [
+        $full_url = null;
+
+        // check full url
+        if (starts_with($uri, 'http') === true) {
+            $full_url = $uri;
+        } else {
+            $full_url = $this->gitLabHost.$this->API_VERSION.$uri;
+        }
+
+        $response = $client->get($full_url, [
             // TODO $queryParam process
             'query' => [
-                'per_page' => 1000,
+                'per_page' => 100,
             ],
             'headers' => [
                 'PRIVATE-TOKEN' => $this->gitLabToken,
@@ -69,7 +79,8 @@ class HttpClient
                 .$response->getStatusCode().' reason:'.$response->getReasonPhrase());
         }
 
-        return json_decode($response->getBody());
+        //return json_decode($response->getBody());
+        return $response;
     }
 
     /**
@@ -99,10 +110,9 @@ class HttpClient
         try {
             $response = $client->send($request, $postData);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            dump($response);
-            echo $e->getRequest();
+            Log::error("Error : " . json_encode($e->getRequest()));
             if ($e->hasResponse()) {
-                echo $e->getResponse();
+                Log::error($e->getResponse());
             }
         }
 

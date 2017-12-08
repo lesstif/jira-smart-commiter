@@ -16,10 +16,10 @@ class DvcsConnectorFactory
 
         $dvcsType = $config->getSettings()->dvcsType;
 
-        return createByType($dvcsType);
+        return self::createByType($dvcsType, $config->getSettings()->gitlabApiVersion);
     }
 
-    public static function createByType($dvcsType) : DvcsContract
+    public static function createByType($dvcsType, $apiVersion = 'V4') : DvcsContract
     {
         if (empty($dvcsType)) {
             throw new SmartCommitException('DVCS Type not supplied');
@@ -27,12 +27,12 @@ class DvcsConnectorFactory
 
         switch ($dvcsType) {
             case 'gitlab':
-                $ver = mb_strtoupper($config->getSettings()->gitlabApiVersion);
+                $ver = mb_strtoupper($apiVersion);
                 if ($ver === 'V3') {
-                    return new GitLabV3Handler($config);
+                    return new GitLabV3Handler();
                 }
 
-                return new GitLabHandler($config);
+                return new GitLabHandler();
             case 'github':
                 throw new NotImplmentationException('github handler not implmentation yet.');
             case 'bitbucket':

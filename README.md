@@ -1,6 +1,9 @@
 # External JIRA Smart Commiter.
 
+[![Latest Stable Version](https://poser.pugx.org/lesstif/jira-smart-commiter/v/stable)](https://packagist.org/packages/lesstif/jira-smart-commiter)
+[![Latest Unstable Version](https://poser.pugx.org/lesstif/jira-smart-commiter/v/unstable)](https://packagist.org/packages/lesstif/jira-smart-commiter)
 [![StyleCI](https://styleci.io/repos/112442170/shield?branch=master&style=flat)](https://styleci.io/repos/112442170)
+[![License](https://poser.pugx.org/lesstif/jira-smart-commiter/license)](https://packagist.org/packages/lesstif/jira-smart-commiter)
 
 External JIRA smart commiter.
 

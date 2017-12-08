@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\DvcsContract;
 use App\SmartCommitConfig;
 use DateTime;
 use Carbon\Carbon;
@@ -81,15 +82,20 @@ class GitlabCommitCommand extends Command
         // step 1. load project config
         $projs = SmartCommitConfig::loadProjects();
 
-        // steap2.
+        // step 2.
+        $idx = 0;
         foreach ($projs as $p) {
             // sync now
+            $dvcs = DvcsConnectorFactory::createByType($p->dvcsType, $p->apiVersion);
+
+            $commits = $dvcs->getCommits($p->id, $since, $until);
 
             // fetch commit
+            //$this->info("$p->name");
+            if ($idx++ == 10) dd(1);
         }
 
         // DvcsConnectorFactory::createByType('git');
-
         $this->info("commit fetch function not yet impl! $sinceOpt, $untilOpt");
     }
 

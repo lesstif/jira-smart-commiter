@@ -9,7 +9,6 @@ abstract class DvcsContract
 {
     /** @var SmartCommitConfig */
     protected $config;
-
     protected $debug;
     protected $verbose;
 
@@ -19,24 +18,18 @@ abstract class DvcsContract
     /** @var \JsonMapper */
     protected $mapper;
 
-    public function __construct(SmartCommitConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
         $this->mapper = new \JsonMapper();
+
+        $this->config = new SmartCommitConfig;
+
+        $this->config->loadSettings();
     }
 
-    public function getProperty($name)
+    public function setDvcsTypeAndVersion($dvcsType, $apiVersion)
     {
-        //Log::debug("Getting '$name'");
-
-        if (empty($this->data)) {
-            $c = $this->config;
-            $this->data = $c->jsonData();
-        }
-
-        if (array_key_exists($name, $this->data)) {
-            return $this->data[$name];
-        }
+        $this->config->setDvcsTypeAndVersion($dvcsType, $apiVersion);
     }
 
     /**
@@ -75,7 +68,7 @@ abstract class DvcsContract
      */
     public function saveProjects($projects, $file = 'projects.json') : void
     {
-        Log::info('saveProjects : '.json_encode($projects));
+        Log::info('saveProjects : '.count($projects));
 
         // loading project list
         $prevProjs = [];
@@ -85,6 +78,8 @@ abstract class DvcsContract
 
             $prevProjs = json_decode($json);
         }
+
+        Log::debug("Before Project count:".count($prevProjs));
 
         foreach ($projects as $p) {
             foreach ($prevProjs as $idx=>$value) {
@@ -96,6 +91,7 @@ abstract class DvcsContract
             }
             $prevProjs[] = $p;
         }
+        Log::debug("After Project count:".count($prevProjs));
 
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
