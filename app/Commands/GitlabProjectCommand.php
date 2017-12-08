@@ -43,19 +43,19 @@ class GitlabProjectCommand extends Command
     public function handle(): void
     {
         $config = $this->option('config');
-        $project = $this->option('project');
+        $projFile = $this->option('project');
 
         if (empty($config))
             $config= 'settings.json';
 
-        if (empty($project))
-            $project= 'projects.json';
+        if (empty($projFile))
+            $projFile= 'projects.json';
 
-        $dvcsHandler = DvcsConnectorFactory::create();
+        $dvcsHandler = DvcsConnectorFactory::create($config);
 
         $projects = $dvcsHandler->getAllProjects(['membership' => true, 'archived' => false]);
 
-        $cnt = $dvcsHandler->saveProjects($projects, $project);
+        $cnt = $dvcsHandler->saveProjects($projects, $projFile);
 
         $this->info('total saved project count:'.$cnt);
     }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\CommitDto;
 use App\Models\GitlabDto;
 use Illuminate\Support\Facades\Log;
 
@@ -27,7 +28,7 @@ class GitLabV3Handler extends DvcsContract
 
         $this->options = [
             'page' => 1,
-            'per_page' => 7,
+            'per_page' => 100,
             'order_by' =>  'created_at',
             'sort' => 'asc',
         ];
@@ -37,10 +38,10 @@ class GitLabV3Handler extends DvcsContract
     {
         $parameters = array_replace($this->options, $parameters);
 
-        $json = $this->client->request('projects/', $parameters);
+        $response = $this->client->request('projects/', $parameters);
 
         $projs = $this->mapper->mapArray(
-            $json, [], GitlabDto::class
+            json_decode($response->getBody()), collect(), GitlabDto::class
         );
 
         // add property
@@ -53,12 +54,41 @@ class GitLabV3Handler extends DvcsContract
         return $projs;
     }
 
+    /**
+     * @param $projectId
+     * @param null $since
+     * @param null $until
+     * @param array $options
+     * @return \Illuminate\Support\Collection
+     * @throws Exceptions\SmartCommitException
+     */
     public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
     {
-        $url = sprintf("%d/repository/commits", $projectId);
-        $proj = $this->client->request($url , $options);
+        $url = sprintf("projects/%d/repository/commits", $projectId);
+        $response = $this->client->request($url , $options);
 
-        return $proj;
+        $commits = $this->mapper->mapArray(
+            json_decode($response->getBody()), collect(), CommitDto::class
+        );
+
+        while( ($next = $this->hasNext($response)) != null) {
+            Log::debug("fetch next commit data..$next\n");
+            $gitlabHost = $this->config->getProperty('gitlabHost');
+            $gitlabToken = $this->config->getProperty('gitlabToken');
+
+            $htc = new HttpClient($gitlabHost, $gitlabToken);
+
+            $response = $htc->requestNoParam($next);
+
+            $tmp = $this->mapper->mapArray(
+                json_decode($response->getBody()), collect(), CommitDto::class
+            );
+            $commits = $commits->merge($tmp);
+
+            Log::debug("Fetched ".count($tmp).",Total:".count($commits));
+        }
+
+        return $commits;
     }
 
     /**
