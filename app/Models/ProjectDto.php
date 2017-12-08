@@ -49,7 +49,7 @@ abstract class ProjectDto implements \JsonSerializable
     /** @var string last commit date time */
     public $lastCommitDateTime;
 
-    abstract function __construct();
+    abstract public function __construct();
 
     public function setDvcs($dvcsType, $apiVersion)
     {

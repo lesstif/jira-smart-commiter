@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Models\GitlabDto;
-use function foo\func;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -45,6 +44,7 @@ class GitLabV3Handler extends DvcsContract
         // add property
         $projs->transform(function ($item, $key) {
             $item->setDvcs('gitlab', 'V3');
+
             return $item;
         });
 
@@ -88,6 +88,7 @@ class GitLabV3Handler extends DvcsContract
 
         $projs->transform(function ($item, $key) {
             $item->setDvcs('gitlab', 'V3');
+
             return $item;
         });
 

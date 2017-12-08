@@ -2,9 +2,9 @@
 
 namespace App\Commands;
 
-use App\DvcsConnectorFactory;
-use Carbon\Carbon;
 use DateTime;
+use Carbon\Carbon;
+use App\DvcsConnectorFactory;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -51,15 +51,17 @@ class GitlabCommitCommand extends Command
 
         $dateFormats = ['Y-m-d H:i:s', 'Y-m-d H:i', 'Y-m-d H', 'Y-m-d'];
 
-        if (!empty($sinceOpt)) {
-            foreach($dateFormats as $format) {
+        if (! empty($sinceOpt)) {
+            foreach ($dateFormats as $format) {
                 $since = DateTime::createFromFormat($format, $sinceOpt);
-                if ($since instanceof DateTime)
+                if ($since instanceof DateTime) {
                     break;
+                }
             }
 
-            if (! $since instanceof DateTime)
+            if (! $since instanceof DateTime) {
                 $this->error("'$sinceOpt' Invalid DateTime Format! ");
+            }
 
             //Carbon::createFromFormat();
         }
@@ -68,7 +70,7 @@ class GitlabCommitCommand extends Command
         $projs = [];
 
         // steap2.
-        foreach($projs as $p) {
+        foreach ($projs as $p) {
             // sync now
 
             // fetch commit

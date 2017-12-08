@@ -89,7 +89,7 @@ class SmartCommitConfig
      * @throws SmartCommitException
      * @throws \JsonMapper_Exception
      */
-    static public function loadProjects($file = 'projects.json') :  \Illuminate\Support\Collection
+    public static function loadProjects($file = 'projects.json') :  \Illuminate\Support\Collection
     {
         if (! Storage::exists($file)) {
             throw new SmartCommitException('Config file '.$file." Not found. running 'php jira-smart-config init' ");

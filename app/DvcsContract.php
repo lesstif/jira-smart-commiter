@@ -43,20 +43,20 @@ abstract class DvcsContract
      * @param array $options
      * @return \Illuminate\Support\Collection
      */
-    abstract public function getProjects($options = []) : \Illuminate\Support\Collection ;
+    abstract public function getProjects($options = []) : \Illuminate\Support\Collection;
 
     /**
      * List all Projects.
      *
      * @return \Illuminate\Support\Collection
      */
-    abstract public function getAllProjects($options = []) : \Illuminate\Support\Collection ;
+    abstract public function getAllProjects($options = []) : \Illuminate\Support\Collection;
 
     /**
      * @param $projectId
      * @return \Illuminate\Support\Collection
      */
-    abstract public function getProjectInfo($projectId) : \Illuminate\Support\Collection ;
+    abstract public function getProjectInfo($projectId) : \Illuminate\Support\Collection;
 
     /**
      * @param $projectId
@@ -65,7 +65,7 @@ abstract class DvcsContract
      * @param array $options
      * @return \Illuminate\Support\Collection
      */
-    abstract public function getCommits($projectId, $since, $until, $options = []) : \Illuminate\Support\Collection ;
+    abstract public function getCommits($projectId, $since, $until, $options = []) : \Illuminate\Support\Collection;
 
     /**
      * save DVCS Project Info.
@@ -75,7 +75,7 @@ abstract class DvcsContract
      */
     public function saveProjects($projects, $file = 'projects.json') : void
     {
-        Log::info('saveProjects : ' . json_encode($projects));
+        Log::info('saveProjects : '.json_encode($projects));
 
         // loading project list
         $prevProjs = [];
@@ -87,8 +87,7 @@ abstract class DvcsContract
         }
 
         foreach ($projects as $p) {
-
-            foreach($prevProjs as $idx=>$value) {
+            foreach ($prevProjs as $idx=>$value) {
                 if ($value->id === $p->id) {
                     Log::debug("$p->id $p->name is already exist. replacing it. $p->dvcsType");
                     $prevProjs[$idx] = $p;
