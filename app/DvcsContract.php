@@ -85,9 +85,9 @@ abstract class DvcsContract
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $prevProjs[] = $p;
-                Log::debug("$p->id $p->name is insert . $p->dvcsType " .count($prevProjs));
+                Log::debug("$p->id $p->name is insert . $p->dvcsType ".count($prevProjs));
             }
         }
 

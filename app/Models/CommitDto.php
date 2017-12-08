@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lesstif
  * Date: 2017-12-08
- * Time: 오후 7:42
+ * Time: 오후 7:42.
  */
 
 namespace App\Models;

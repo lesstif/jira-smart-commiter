@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Exceptions\SmartCommitException;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\SmartCommitException;
 
 class HttpClient
 {
@@ -94,7 +94,6 @@ class HttpClient
         return $response;
     }
 
-
     /**
      * performing gitlab api request.
      *
@@ -122,7 +121,7 @@ class HttpClient
         try {
             $response = $client->send($request, $postData);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            Log::error("Error : " . json_encode($e->getRequest()));
+            Log::error('Error : '.json_encode($e->getRequest()));
             if ($e->hasResponse()) {
                 Log::error($e->getResponse());
             }
