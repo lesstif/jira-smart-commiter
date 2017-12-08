@@ -2,14 +2,25 @@
 
 namespace App\Commands;
 
+use App\SmartCommitConfig;
 use DateTime;
 use Carbon\Carbon;
 use App\DvcsConnectorFactory;
+use Illuminate\Console\Scheduling\CacheMutex;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Storage;
 use LaravelZero\Framework\Commands\Command;
+use Illuminated\Console\WithoutOverlapping;
 
 class GitlabCommitCommand extends Command
 {
+    // for preventing command overlap
+    use WithoutOverlapping;
+
+    protected $mutexStrategy = 'file';
+
+    //protected $mutexTimeout = 0; // milliseconds
+
     /**
      * The name and signature of the console command.
      *
@@ -61,13 +72,14 @@ class GitlabCommitCommand extends Command
 
             if (! $since instanceof DateTime) {
                 $this->error("'$sinceOpt' Invalid DateTime Format! ");
+                exit(-1);
             }
 
             //Carbon::createFromFormat();
         }
 
         // step 1. load project config
-        $projs = [];
+        $projs = SmartCommitConfig::loadProjects();
 
         // steap2.
         foreach ($projs as $p) {

@@ -1,5 +1,7 @@
 # External JIRA Smart Commiter.
 
+[![StyleCI](https://styleci.io/repos/112442170/shield?branch=master&style=flat)](https://styleci.io/repos/112442170)
+
 External JIRA smart commiter.
 
 # How it works

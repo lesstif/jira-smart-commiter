@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.1",
         "illuminate/log": "5.5.*",
+        "illuminated/console-mutex": "^5.5",
         "intonate/tinker-zero": "^1.0",
         "laravel-zero/laravel-zero": "4.0.*",
         "m4tthumphrey/php-gitlab-api": "^9.6",

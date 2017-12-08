@@ -45,8 +45,12 @@ class InitCommand extends Command
      */
     public function handle(): void
     {
-        //Storage::put("reminders.txt", "Task 1");
         $this->config->saveSettings();
+
+        // check and create file mutex directory
+        if (!Storage::exists('app')) {
+            Storage::makeDirectory('app');
+        }
 
         $this->info('initial config generation done.!');
         $this->info("Edit the '~/.smartcommit/settings.json' to suit your environment. ");
