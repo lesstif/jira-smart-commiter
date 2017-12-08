@@ -92,14 +92,18 @@ class SmartCommitConfig
     /**
      * load DVCS Project list from json.
      *
+     * @param boolean $throwException
      * @param string $file
      * @throws SmartCommitException
      * @throws \JsonMapper_Exception
      */
-    public static function loadProjects($file = 'projects.json') :  \Illuminate\Support\Collection
+    public static function loadProjects($throwException, $file = 'projects.json') :  \Illuminate\Support\Collection
     {
         if (! Storage::exists($file)) {
-            throw new SmartCommitException('Project Setting file '.$file." Not found. running 'php jira-smart-config project:create-list' ");
+            if ($throwException === true)
+                throw new SmartCommitException('Project Setting file '.$file." Not found. running 'php jira-smart-config project:create-list' ");
+            else
+                return collect();
         }
 
         $json = Storage::get($file);

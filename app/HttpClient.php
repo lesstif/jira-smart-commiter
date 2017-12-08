@@ -54,19 +54,11 @@ class HttpClient
 
         $client = new \GuzzleHttp\Client($basket);
 
-        $full_url = null;
-
-        // check full url
-        if (starts_with($uri, 'http') === true) {
-            $full_url = $uri;
-        } else {
-            $full_url = $this->gitLabHost.$this->API_VERSION.$uri;
-        }
-
-        $response = $client->get($full_url, [
+        $response = $client->get($this->gitLabHost.$this->API_VERSION.$uri, [
             // TODO $queryParam process
             'query' => [
-                'per_page' => 100,
+                'page' => $option['page'] ?? 1,
+                'per_page' => $option['per_page'] ?? 29,
             ],
             'headers' => [
                 'PRIVATE-TOKEN' => $this->gitLabToken,
@@ -82,6 +74,26 @@ class HttpClient
         //return json_decode($response->getBody());
         return $response;
     }
+
+    public function requestNoParam($full_url) : \GuzzleHttp\Psr7\Response
+    {
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->get($full_url, [
+            'headers' => [
+                'PRIVATE-TOKEN' => $this->gitLabToken,
+            ],
+        ]);
+
+        // TODO add 20X status
+        if ($response->getStatusCode() != 200) {
+            throw new SmartCommitException('Http request failed. status code : '
+                .$response->getStatusCode().' reason:'.$response->getReasonPhrase());
+        }
+
+        return $response;
+    }
+
 
     /**
      * performing gitlab api request.

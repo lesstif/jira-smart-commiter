@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\GitlabDto;
+use Illuminate\Support\Facades\Log;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -26,7 +27,7 @@ class GitLabV3Handler extends DvcsContract
 
         $this->options = [
             'page' => 1,
-            'per_page' => 100,
+            'per_page' => 7,
             'order_by' =>  'created_at',
             'sort' => 'asc',
         ];
@@ -90,15 +91,22 @@ class GitLabV3Handler extends DvcsContract
             $json, collect(), GitlabDto::class
         );
 
-fetch_next:
-        $next = $this->hasNext($response);
-        if ($next != null) {
-            $response = $this->client->request('projects/', $parameters);
+        while( ($next = $this->hasNext($response)) != null) {
+            //Log::debug("fetch next data..$next\n");
+            $gitlabHost = $this->config->getProperty('gitlabHost');
+            $gitlabToken = $this->config->getProperty('gitlabToken');
+
+            $htc = new HttpClient($gitlabHost, $gitlabToken);
+
+            $response = $htc->requestNoParam($next);
 
             $tmp = $this->mapper->mapArray(
                 $json, collect(), GitlabDto::class
             );
             $projs = $projs->merge($tmp);
+
+            Log::debug("Fetched ".count($tmp).",Total:".count($projs));
+
         }
 
         $projs->transform(function ($item, $key) {
@@ -146,6 +154,6 @@ fetch_next:
             }
         }
 
-        return $next;
+        return null;
     }
 }
