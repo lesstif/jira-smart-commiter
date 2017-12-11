@@ -20,11 +20,6 @@ class GitlabCommitCommand extends Command
     protected $mutexStrategy = 'file';
 
     //protected $mutexTimeout = 0; // milliseconds
-    public function getMutexName()
-    {
-        return "icmutex-for-command1-and-command2";
-    }
-
 
     /**
      * The name and signature of the console command.
@@ -103,28 +98,22 @@ class GitlabCommitCommand extends Command
         $projs = SmartCommitConfig::loadProjects($project);
 
         if (!empty($idOrName)) {
-            $this->info("Project $idOrName ");
             $proj = $projs->where('id', $idOrName)->first() ?? $projs->where('name', $idOrName)->first();
 
             if ($proj === null){
                 throw new SmartCommitException("Project '$idOrName' not found!");
             }
 
-            // sync now
-            $dvcs = DvcsConnectorFactory::createByType($proj->dvcsType, $proj->apiVersion);
+            $this->info("Only fetch for Project ".$proj->name);
 
-            $commits = $dvcs->getCommits($proj->id, $since, $until);
-
-            // fetch commit
-            $this->info("$proj->name has total commit:".count($commits));
-            if (count($commits) > 0) {
-                dump($commits);
-            }
+            // create single element collection;
+            $projs = collect([$proj]);
         }
 
-        // step 2.
+        // step 2. fetch commits list
         foreach ($projs as $p) {
-            $this->fetchCommit($p, null, null);
+            $this->fetchCommit($p, $since ?? $p->lastCommit, null);
+            // do something
         }
 
         // DvcsConnectorFactory::createByType('git');
