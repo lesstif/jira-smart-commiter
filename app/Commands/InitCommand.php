@@ -55,9 +55,7 @@ class InitCommand extends Command
         $this->config->saveSettings($config);
 
         // check and create file mutex directory
-        if (! Storage::disk('app-dir')->exist('app')) {
-            Storage::disk('app-dir')->makeDirectory('app');
-        }
+        make_app_dir();
 
         $this->info('initial config generation done.!');
         $this->info("Edit the '~/.smartcommit/${config}' to suit your environment. ");

@@ -21,16 +21,3 @@ if (file_exists(__DIR__.'/../vendor/autoload.php')) {
 } else {
     require __DIR__.'/../../../autoload.php';
 }
-
-/**
- * Get the path to the storage folder.
- *
- * @param  string $path
- *
- * @return string
- */
-function storage_path($path = '')
-{
-    //return app()->storagePath().($path ? DIRECTORY_SEPARATOR.$path : $path);
-    return getenv('HOME').DIRECTORY_SEPARATOR.'.smartcommit'.($path ? DIRECTORY_SEPARATOR.$path : $path);
-}

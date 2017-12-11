@@ -158,7 +158,8 @@ class GitLabV3Handler extends DvcsContract
 
         // no more data
         if (empty($link)) {
-            return;
+            debug("Link header is not exist!", $link);
+            return null;
         }
 
         $ar = preg_split('/,/', $link[0]);
@@ -172,5 +173,7 @@ class GitLabV3Handler extends DvcsContract
                 return $next[1];
             }
         }
+        info("Link header regex not matchs! ", $ar);
+        return null;
     }
 }

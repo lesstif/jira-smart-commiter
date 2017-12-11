@@ -20,6 +20,11 @@ class GitlabCommitCommand extends Command
     protected $mutexStrategy = 'file';
 
     //protected $mutexTimeout = 0; // milliseconds
+    public function getMutexName()
+    {
+        return "icmutex-for-command1-and-command2";
+    }
+
 
     /**
      * The name and signature of the console command.

@@ -93,7 +93,8 @@ abstract class DvcsContract
 
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        Storage::disk('app-dir')->put($file, $json);
+
+        config_save($json, $file, false);
 
         return $prevProjs->count();
     }

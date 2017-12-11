@@ -42,6 +42,8 @@ return [
         Intonate\TinkerZero\TinkerZeroServiceProvider::class,
     ],
 
+    'mutex-dir' => app_path(),
+
     'config' => [
         'dir' => '~/.smartcommit',
     ],
