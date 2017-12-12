@@ -158,7 +158,8 @@ class GitLabV3Handler extends DvcsContract
 
         // no more data
         if (empty($link)) {
-            debug("Link header is not exist!", $link);
+            debug('Link header is not exist!', $link);
+
             return null;
         }
 
@@ -175,7 +176,8 @@ class GitLabV3Handler extends DvcsContract
                 return $next[1];
             }
         }
-        info("we reached last entity! ", $ar);
+        info('we reached last entity! ', $ar);
+
         return null;
     }
 }

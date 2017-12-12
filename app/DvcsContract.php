@@ -88,7 +88,7 @@ abstract class DvcsContract
                 //Log::debug("$p->id $p->name is insert . $p->dvcsType ".count($prevProjs));
             }
         }
-        Log::info("Project List merged: ".count($prevProjs));
+        Log::info('Project List merged: '.count($prevProjs));
 
         // replace
         $json = json_encode($prevProjs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

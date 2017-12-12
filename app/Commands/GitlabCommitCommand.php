@@ -2,12 +2,12 @@
 
 namespace App\Commands;
 
-use App\Exceptions\SmartCommitException;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\ProjectDto;
 use App\SmartCommitConfig;
 use App\DvcsConnectorFactory;
+use App\Exceptions\SmartCommitException;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminated\Console\WithoutOverlapping;
 use LaravelZero\Framework\Commands\Command;
@@ -97,14 +97,14 @@ class GitlabCommitCommand extends Command
         // step 1. load project config
         $projs = SmartCommitConfig::loadProjects($project);
 
-        if (!empty($idOrName)) {
+        if (! empty($idOrName)) {
             $prj = $projs->where('id', $idOrName)->first() ?? $projs->where('name', $idOrName)->first();
 
-            if ($prj === null){
+            if ($prj === null) {
                 throw new SmartCommitException("Project '$idOrName' not found!");
             }
 
-            $this->info("Only fetch for Project ".$prj->name);
+            $this->info('Only fetch for Project '.$prj->name);
 
             // create single element collection;
             $projs = collect([$prj]);

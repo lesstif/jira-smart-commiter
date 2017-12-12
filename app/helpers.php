@@ -1,8 +1,8 @@
 <?php
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use \App\Exceptions\SmartCommitException;
+use App\Exceptions\SmartCommitException;
 
 if (! function_exists('today')) {
     /**
@@ -50,12 +50,12 @@ if (! function_exists('full_path')) {
 if (! function_exists('config_save')) {
 
     /**
-     * save config file
+     * save config file.
      *
      * @param $contents
      * @param $fileName
      * @param $overwrite
-     * @return bool|integer
+     * @return bool|int
      */
     function config_save($contents, $fileName, $overwrite)
     {
@@ -69,7 +69,7 @@ if (! function_exists('config_save')) {
 
             $toFile = $fullPath.'-'.$now;
 
-            rename ( $fullPath , $toFile);
+            rename($fullPath, $toFile);
         }
 
         return file_put_contents($fullPath, $contents);
@@ -77,42 +77,40 @@ if (! function_exists('config_save')) {
 }
 
 if (! function_exists('make_app_dir')) {
-
     function make_app_dir($path = '')
     {
         $main_dir = app_path();
 
         // check directory exist.
-        if (!file_exists($main_dir)) {
+        if (! file_exists($main_dir)) {
             mkdir($main_dir);
         }
 
-        if (!is_dir($main_dir)) {
-            throw new SmartCommitException($main_dir . " is not directory!");
+        if (! is_dir($main_dir)) {
+            throw new SmartCommitException($main_dir.' is not directory!');
         }
 
-        $log_dir = $main_dir . DIRECTORY_SEPARATOR . 'logs';
-        if (!file_exists($log_dir)) {
+        $log_dir = $main_dir.DIRECTORY_SEPARATOR.'logs';
+        if (! file_exists($log_dir)) {
             mkdir($log_dir);
         }
 
-        $mutex_dir = $main_dir . DIRECTORY_SEPARATOR . 'app';
-        if (!file_exists($mutex_dir)) {
+        $mutex_dir = $main_dir.DIRECTORY_SEPARATOR.'app';
+        if (! file_exists($mutex_dir)) {
             mkdir($mutex_dir);
         }
     }
 }
 
-
-/**
+/*
  * log helper
  */
 if (! function_exists('msg_format')) {
     function msg_format($message, $additionalData)
     {
         $msg = $message;
-        if (is_array($additionalData) || is_object($additionalData)){
-            $msg .= json_encode($additionalData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        if (is_array($additionalData) || is_object($additionalData)) {
+            $msg .= json_encode($additionalData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } else {
             $msg .= $additionalData;
         }
