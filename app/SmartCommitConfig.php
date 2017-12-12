@@ -3,11 +3,9 @@
 namespace App;
 
 use JsonMapper;
-use Carbon\Carbon;
 use App\Models\Settings;
 use Gitlab\Model\Project;
 use App\Models\ProjectDto;
-use Illuminate\Support\Facades\Storage;
 use App\Exceptions\SmartCommitException;
 
 /**
