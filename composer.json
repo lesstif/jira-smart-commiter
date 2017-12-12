@@ -11,6 +11,7 @@
         "intonate/tinker-zero": "^1.0",
         "laravel-zero/laravel-zero": "4.0.*",
         "m4tthumphrey/php-gitlab-api": "^9.6",
+        "mustache/mustache": "^2.12",
         "netresearch/jsonmapper": "^1.4",
         "php-http/guzzle6-adapter": "^1.1"
     },
