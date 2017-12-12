@@ -98,16 +98,16 @@ class GitlabCommitCommand extends Command
         $projs = SmartCommitConfig::loadProjects($project);
 
         if (!empty($idOrName)) {
-            $proj = $projs->where('id', $idOrName)->first() ?? $projs->where('name', $idOrName)->first();
+            $prj = $projs->where('id', $idOrName)->first() ?? $projs->where('name', $idOrName)->first();
 
-            if ($proj === null){
+            if ($prj === null){
                 throw new SmartCommitException("Project '$idOrName' not found!");
             }
 
-            $this->info("Only fetch for Project ".$proj->name);
+            $this->info("Only fetch for Project ".$prj->name);
 
             // create single element collection;
-            $projs = collect([$proj]);
+            $projs = collect([$prj]);
         }
 
         // step 2. fetch commits list
@@ -132,7 +132,7 @@ class GitlabCommitCommand extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    private function fetchCommit(ProjectDto $proj, $since, $until) : \Illuminate\Support\Collection
+    private function fetchCommit(ProjectDto $proj, DateTime $since, $until) : \Illuminate\Support\Collection
     {
         // sync now
         $dvcs = DvcsConnectorFactory::createByType($proj->dvcsType, $proj->apiVersion);

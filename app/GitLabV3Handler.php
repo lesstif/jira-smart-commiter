@@ -149,7 +149,7 @@ class GitLabV3Handler extends DvcsContract
      * gitlab api v3 pagination processing.
      *
      * @param $response
-     * @return string next url
+     * @return string|null next url
      */
     private function hasNext($response) : ?string
     {
@@ -169,11 +169,13 @@ class GitLabV3Handler extends DvcsContract
 
         foreach ($ar as $l) {
             // format: <https://gitlab.example.com/api/v3/projects?page=2&per_page=100>; rel="next"
+            //Link: <https://api.github.com/resource?page=2>; rel="next",
+            //<https://api.github.com/resource?page=5>; rel="last"
             if (preg_match('/<(.*)>;[ \t]*rel="next"/', $l, $next) === 1) {
                 return $next[1];
             }
         }
-        info("Link header regex not matchs! ", $ar);
+        info("we reached last entity! ", $ar);
         return null;
     }
 }
