@@ -5,7 +5,7 @@
 [![StyleCI](https://styleci.io/repos/112442170/shield?branch=master&style=flat)](https://styleci.io/repos/112442170)
 [![License](https://poser.pugx.org/lesstif/jira-smart-commiter/license)](https://packagist.org/packages/lesstif/jira-smart-commiter)
 
-External JIRA smart commiter built on [laravel zero](https://github.com/laravel-zero/laravel-zero) framework.
+External JIRA smart commiter built with [Laravel Zero](https://github.com/laravel-zero/laravel-zero).
 
 # How it works
 
