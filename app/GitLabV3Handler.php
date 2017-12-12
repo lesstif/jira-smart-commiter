@@ -4,7 +4,10 @@ namespace App;
 
 use App\Models\CommitDto;
 use App\Models\GitlabDto;
+use App\Models\ProjectDto;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use LINK_HEADER;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -55,37 +58,49 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * @param $projectId
+     * @param integer $projectId
      * @param null $since
      * @param null $until
      * @param array $options
      * @return \Illuminate\Support\Collection
      * @throws Exceptions\SmartCommitException
      */
-    public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
+    public function getCommits(int $projectId, Carbon $since = null, Carbon $until = null, string $branch = null): \Illuminate\Support\Collection
     {
         $url = sprintf('projects/%d/repository/commits', $projectId);
-        $response = $this->client->request($url, $options);
+
+        $url .= '?' . http_build_query([
+               'since' => toIso8601String($since),
+               'until' => toIso8601String($until),
+               'ref_name' => $branch,
+            ],
+PHP_QUERY_RFC3986);
+
+        debug('request commit list:', $url);
+
+        $response = $this->client->request($url);
 
         $commits = $this->mapper->mapArray(
             json_decode($response->getBody()), collect(), CommitDto::class
         );
 
-        while (($next = $this->hasNext($response)) != null) {
-            Log::debug("fetch next commit data..$next\n");
+        $next_url = '';
+
+        while (has_next_link($response, $next_url) == LINK_HEADER::HAS_NEXT()) {
+            debug('fetch next commit data.', $next_url);
             $gitlabHost = $this->config->getProperty('gitlabHost');
             $gitlabToken = $this->config->getProperty('gitlabToken');
 
             $htc = new HttpClient($gitlabHost, $gitlabToken);
 
-            $response = $htc->requestNoParam($next);
+            $response = $htc->requestNoParam($next_url);
 
             $tmp = $this->mapper->mapArray(
                 json_decode($response->getBody()), collect(), CommitDto::class
             );
             $commits = $commits->merge($tmp);
 
-            Log::debug('Fetched '.count($tmp).',Total:'.count($commits));
+            debug('Fetched '.count($tmp).',Total:', count($commits));
         }
 
         return $commits;
@@ -119,21 +134,22 @@ class GitLabV3Handler extends DvcsContract
             json_decode($response->getBody()), collect(), GitlabDto::class
         );
 
-        while (($next = $this->hasNext($response)) != null) {
-            //Log::debug("fetch next data..$next\n");
+        $next_url = '';
+        while (has_next_link($response,$next_url) == LINK_HEADER::HAS_NEXT()) {
+            debug("fetch next data.", $next_url);
             $gitlabHost = $this->config->getProperty('gitlabHost');
             $gitlabToken = $this->config->getProperty('gitlabToken');
 
             $htc = new HttpClient($gitlabHost, $gitlabToken);
 
-            $response = $htc->requestNoParam($next);
+            $response = $htc->requestNoParam($next_url);
 
             $tmp = $this->mapper->mapArray(
                 json_decode($response->getBody()), collect(), GitlabDto::class
             );
             $projs = $projs->merge($tmp);
 
-            //Log::debug("Fetched ".count($tmp).",Total:".count($projs));
+            debug("Fetched ".count($tmp).",Total:", count($projs));
         }
 
         $projs->transform(function ($item, $key) {
@@ -143,41 +159,5 @@ class GitLabV3Handler extends DvcsContract
         });
 
         return $projs;
-    }
-
-    /**
-     * gitlab api v3 pagination processing.
-     *
-     * @param $response
-     * @return string|null next url
-     */
-    private function hasNext($response) : ?string
-    {
-        // find Link Header for remained data
-        $link = $response->getHeader('Link');
-
-        // no more data
-        if (empty($link)) {
-            debug('Link header is not exist!', $link);
-
-            return null;
-        }
-
-        $ar = preg_split('/,/', $link[0]);
-
-        $found = false;
-        $next = null;
-
-        foreach ($ar as $l) {
-            // format: <https://gitlab.example.com/api/v3/projects?page=2&per_page=100>; rel="next"
-            //Link: <https://api.github.com/resource?page=2>; rel="next",
-            //<https://api.github.com/resource?page=5>; rel="last"
-            if (preg_match('/<(.*)>;[ \t]*rel="next"/', $l, $next) === 1) {
-                return $next[1];
-            }
-        }
-        info('we reached last entity! ', $ar);
-
-        return null;
     }
 }

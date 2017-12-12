@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\ProjectDto;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 abstract class DvcsContract
@@ -51,13 +53,13 @@ abstract class DvcsContract
     abstract public function getProjectInfo($projectId) : \Illuminate\Support\Collection;
 
     /**
-     * @param $projectId
+     * @param int $projectId
      * @param $since
      * @param $until
      * @param array $options
      * @return \Illuminate\Support\Collection
      */
-    abstract public function getCommits($projectId, $since, $until, $options = []) : \Illuminate\Support\Collection;
+    abstract public function getCommits(int $projectId, Carbon $since = null, Carbon $until = null, string $branch = null) : \Illuminate\Support\Collection;
 
     /**
      * save DVCS Project Info.
