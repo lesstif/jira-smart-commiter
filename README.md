@@ -5,7 +5,7 @@
 [![StyleCI](https://styleci.io/repos/112442170/shield?branch=master&style=flat)](https://styleci.io/repos/112442170)
 [![License](https://poser.pugx.org/lesstif/jira-smart-commiter/license)](https://packagist.org/packages/lesstif/jira-smart-commiter)
 
-External JIRA smart commiter.
+External JIRA smart commiter built on [laravel zero](https://github.com/laravel-zero/laravel-zero) framework.
 
 # How it works
 
@@ -34,38 +34,74 @@ External JIRA smart commiter.
 # Installation
 
 ## Build from Source
-Recommended method for gitlab < 9.0
 
 1. clone repository
-  ```sh
-  git clone https://github.com/lesstif/jira-smart-commiter.git && cd jira-smart-commiter
-  ```
 
-1. change gitlab api library version in the composer.json
-   
-   if gitlab >= 9.0(API V4), then use "^9.6"
-  ```sh
-  "require": {
-        "m4tthumphrey/php-gitlab-api": "^9.6",
-  ```
-  
-   if gitlab < 9.0(API V3), then use "~8.0"
-  ```sh
-  "require": {
-        "m4tthumphrey/php-gitlab-api": "~8.0",
-  ```
+    ```sh
+    git clone https://github.com/lesstif/jira-smart-commiter.git && cd jira-smart-commiter
+    ```
 
 1. install composer dependency
-  ```sh
-  composer install
-  ```
+
+    ```sh
+    composer install
+    ```
+
+1. Perform an application build
+
+    ```sh
+    php jira-smart-commiter app:build jira-smart-commiter.phar    
+    ```
+    
+    you can find built binary in builds directory.
 
 ## download
+
+Recommended method 
+
+1. download pre-built binary
+
+    using wget 
+    ```sh
+    wget https://github.com/lesstif/jira-smart-commiter/releases/download/0.1-alpha/jira-smart-commiter.phar
+    ```
+
+    using curl
+    ```sh
+    curl -k -L -O https://github.com/lesstif/jira-smart-commiter/releases/download/0.1-alpha/jira-smart-commiter.phar
+    ```
+1. change mod
+
+    ```sh
+    chmod +x jira-smart-commiter.phar
+    ```
 
 
 # Usage
 
-TODO
+1. generate initial configuration
+    
+    ```sh
+    php jira-smart-commiter.phar init
+    ```
+
+1. change DVCS Info(URL, Type and API Version) field and JIRA Server Info in the *$HOME/.smartcommit/settings.json* file.
+
+    ```sh
+    vim ~/.smartcommit/settings.json
+    ```
+
+1. generate dvcs project list.* $HOME/.smartcommit/projects.json*:
+
+    ```sh
+     php jira-smart-commiter.phar project:create-list
+    ```
+
+1. fetch commit & sync to JIRA.
+    
+    ```sh
+     php jira-smart-commiter.phar fetch:commit --since=DATETIMEString --until=DATETIMEString
+    ```
 
 
 # See also
