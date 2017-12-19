@@ -21,6 +21,11 @@ class GitlabCommitCommand extends Command
 
     //protected $mutexTimeout = 0; // milliseconds
 
+    public function getMutexFileStorage()
+    {
+        return app_path('mutex');
+    }
+
     /**
      * The name and signature of the console command.
      *

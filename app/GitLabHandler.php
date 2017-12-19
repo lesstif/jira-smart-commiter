@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use GitLab\Client;
 use Gitlab\ResultPager;
 use App\Models\GitlabDto;
@@ -39,9 +40,24 @@ class GitLabHandler extends DvcsContract
         return $this->parseProjectArray($jsonProjects);
     }
 
-    public function getCommits($projectId, $since = null, $until = null, $options = []): \Illuminate\Support\Collection
+    public function getCommits(int $projectId, Carbon $since = null, Carbon $until = null,
+                               string $branch = null) : \Illuminate\Support\Collection
     {
-        $proj = $this->client->repositories()->branches($projectId, $options);
+        //$proj = $this->client->repositories()->branches($projectId, $options);
+
+        $options = [];
+
+        if (!empty($branch)) {
+            $options['ref_name'] = $branch;
+        }
+        if ($since != null) {
+            $options['since'] = $since;
+        }
+        if ($until != null) {
+            $options['until'] = $until;
+        }
+
+        $proj = $this->client->repositories()->commits($projectId, $options);
 
         return collect($proj);
     }
