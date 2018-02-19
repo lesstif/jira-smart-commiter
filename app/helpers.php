@@ -1,20 +1,21 @@
 <?php
 
 use Carbon\Carbon;
+use MyCLabs\Enum\Enum;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\SmartCommitException;
-use \GuzzleHttp\Psr7\Response;
-use MyCLabs\Enum\Enum;
 
 // HTTP Link Header for pagination
-class LINK_HEADER extends Enum {
+class LINK_HEADER extends Enum
+{
     const NONE = 'NONE';
     const HAS_NEXT = 'HAS_NEXT';
     const REACH_LAST = 'REACH_LAST';
 }
 
 /**
- * Check HTTP Link header and find next entity
+ * Check HTTP Link header and find next entity.
  *
  * @param Response $response
  * @param $next_url out next_url
@@ -184,8 +185,9 @@ if (! function_exists('debug')) {
 if (! function_exists('toIso8601String')) {
     function toIso8601String(?Carbon $dt) : ?string
     {
-        if ($dt instanceof Carbon)
+        if ($dt instanceof Carbon) {
             return $dt->toIso8601String();
+        }
 
         return null;
     }

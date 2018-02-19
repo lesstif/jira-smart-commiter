@@ -47,7 +47,7 @@ class GitLabHandler extends DvcsContract
 
         $options = [];
 
-        if (!empty($branch)) {
+        if (! empty($branch)) {
             $options['ref_name'] = $branch;
         }
         if ($since != null) {

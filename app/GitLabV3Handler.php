@@ -2,12 +2,10 @@
 
 namespace App;
 
+use LINK_HEADER;
+use Carbon\Carbon;
 use App\Models\CommitDto;
 use App\Models\GitlabDto;
-use App\Models\ProjectDto;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
-use LINK_HEADER;
 
 class GitLabV3Handler extends DvcsContract
 {
@@ -58,7 +56,7 @@ class GitLabV3Handler extends DvcsContract
     }
 
     /**
-     * @param integer $projectId
+     * @param int $projectId
      * @param null $since
      * @param null $until
      * @param array $options
@@ -69,7 +67,7 @@ class GitLabV3Handler extends DvcsContract
     {
         $url = sprintf('projects/%d/repository/commits', $projectId);
 
-        $url .= '?' . http_build_query([
+        $url .= '?'.http_build_query([
                'since' => toIso8601String($since),
                'until' => toIso8601String($until),
                'ref_name' => $branch,
@@ -135,8 +133,8 @@ PHP_QUERY_RFC3986);
         );
 
         $next_url = '';
-        while (has_next_link($response,$next_url) == LINK_HEADER::HAS_NEXT()) {
-            debug("fetch next data.", $next_url);
+        while (has_next_link($response, $next_url) == LINK_HEADER::HAS_NEXT()) {
+            debug('fetch next data.', $next_url);
             $gitlabHost = $this->config->getProperty('gitlabHost');
             $gitlabToken = $this->config->getProperty('gitlabToken');
 
@@ -149,7 +147,7 @@ PHP_QUERY_RFC3986);
             );
             $projs = $projs->merge($tmp);
 
-            debug("Fetched ".count($tmp).",Total:", count($projs));
+            debug('Fetched '.count($tmp).',Total:', count($projs));
         }
 
         $projs->transform(function ($item, $key) {

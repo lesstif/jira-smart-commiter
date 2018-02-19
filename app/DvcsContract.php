@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Models\ProjectDto;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
