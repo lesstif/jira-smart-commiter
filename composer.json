@@ -3,7 +3,7 @@
     "description": "JIRA Smart commiter with DVCS Repository.",
     "homepage": "https://github.com/lesstif/jira-smart-commiter",
     "keywords": ["jira", "rest", "jira-php", "jira-smart-commit", "jira-dvcs", "jira-dvcs-connector"],
-    "license": "Apache 2.0",
+    "license": "Apache-2.0",
     "require": {
         "php": ">=7.1",
         "illuminate/log": "5.5.*",
