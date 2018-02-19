@@ -21,6 +21,11 @@ class GitlabCommitCommand extends Command
 
     //protected $mutexTimeout = 0; // milliseconds
 
+    public function getMutexFileStorage()
+    {
+        return app_path('mutex');
+    }
+
     /**
      * The name and signature of the console command.
      *
@@ -31,6 +36,7 @@ class GitlabCommitCommand extends Command
                             {--until= : Only commits before or on this date will be returned }
                             {--config= : Use file instead of settings.json}
                             {--project= : Save to out instead of projects.json}
+                            {--branch= : The name of a repository branch. if not set, default branch}
                             {--idOrName= : fetch  specifified project\' commit only.}';
 
     /**
@@ -65,6 +71,8 @@ class GitlabCommitCommand extends Command
 
         $idOrName = $this->option('idOrName');
 
+        $branch = $this->option('branch');
+
         if (empty($config)) {
             $config = 'settings.json';
         }
@@ -91,7 +99,7 @@ class GitlabCommitCommand extends Command
                 exit(-1);
             }
 
-            //Carbon::createFromFormat();
+            $since = Carbon::instance($since);
         }
 
         // step 1. load project config
@@ -112,7 +120,7 @@ class GitlabCommitCommand extends Command
 
         // step 2. fetch commits list
         foreach ($projs as $p) {
-            $this->fetchCommit($p, $since ?? $p->lastCommit, null);
+            $this->fetchCommit($p, $since ?? $p->lastCommit, null, $branch);
             // do something
         }
 
@@ -132,12 +140,12 @@ class GitlabCommitCommand extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    private function fetchCommit(ProjectDto $proj, DateTime $since, $until) : \Illuminate\Support\Collection
+    private function fetchCommit(ProjectDto $proj, ?Carbon $since, ?Carbon $until, string $branch = null) : \Illuminate\Support\Collection
     {
         // sync now
         $dvcs = DvcsConnectorFactory::createByType($proj->dvcsType, $proj->apiVersion);
 
-        $commits = $dvcs->getCommits($proj->id, $since, $until);
+        $commits = $dvcs->getCommits($proj->id, $since, $until, $branch);
 
         // fetch commit
         $this->info("$proj->name has total commit:".count($commits));

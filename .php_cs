@@ -1,5 +1,6 @@
 <?php
 
+/*
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
@@ -19,3 +20,11 @@ $config = Config::create()
     ->setFinder($finder);
 
 return $config;
+*/
+
+// Needed to get styleci-bridge loaded
+require_once __DIR__.'/vendor/autoload.php';
+
+use SLLH\StyleCIBridge\ConfigBridge;
+
+return ConfigBridge::create();

@@ -1,8 +1,57 @@
 <?php
 
 use Carbon\Carbon;
+use MyCLabs\Enum\Enum;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\SmartCommitException;
+
+// HTTP Link Header for pagination
+class LINK_HEADER extends Enum
+{
+    const NONE = 'NONE';
+    const HAS_NEXT = 'HAS_NEXT';
+    const REACH_LAST = 'REACH_LAST';
+}
+
+/**
+ * Check HTTP Link header and find next entity.
+ *
+ * @param Response $response
+ * @param $next_url out next_url
+ * @return LINK_HEADER
+ */
+function has_next_link(Response $response, &$next_url) : LINK_HEADER
+{
+    // find Link Header for remained data
+    $link = $response->getHeader('Link');
+
+    // no more data
+    if (empty($link)) {
+        debug('Link header is not exist!', $link);
+
+        return LINK_HEADER::NONE();
+    }
+
+    $ar = preg_split('/,/', $link[0]);
+
+    $found = false;
+    $next = null;
+
+    foreach ($ar as $l) {
+        // format: <https://gitlab.example.com/api/v3/projects?page=2&per_page=100>; rel="next"
+        //Link: <https://api.github.com/resource?page=2>; rel="next",
+        //<https://api.github.com/resource?page=5>; rel="last"
+        if (preg_match('/<(.*)>;[ \t]*rel="next"/', $l, $next) === 1) {
+            $next_url = $next[1];
+
+            return LINK_HEADER::HAS_NEXT();
+        }
+    }
+    info('we reached last entity! ', $ar);
+
+    return LINK_HEADER::REACH_LAST();
+}
 
 if (! function_exists('today')) {
     /**
@@ -130,5 +179,16 @@ if (! function_exists('debug')) {
     function debug($message, $additionalData)
     {
         Log::debug(msg_format($message, $additionalData));
+    }
+}
+
+if (! function_exists('toIso8601String')) {
+    function toIso8601String(?Carbon $dt) : ?string
+    {
+        if ($dt instanceof Carbon) {
+            return $dt->toIso8601String();
+        }
+
+        return null;
     }
 }

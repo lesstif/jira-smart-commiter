@@ -1,3 +1,26 @@
 preset: laravel
+
 disabled:
     #  - self_accessor
+
+enabled:
+  - mb_str_functions
+
+  ## not exist Fixer.
+  # - newline_after_open_tag
+  # - ordered_use
+  #  - php_unit_construct
+  #  - php_unit_strict
+
+finder:
+#  include:
+#    - "app"
+#    - "src"
+  not-name:
+    - "*.php.twig"
+  not-path:
+    - "src/StyleCI/Fixers.php"
+  exclude:
+    - "vendors"
+    - "storage"
+    - "node_modules"
